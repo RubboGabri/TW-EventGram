@@ -18,7 +18,23 @@ class DatabaseHelper {
         return $stmt;
     }
 
-    
+    public function getUserPosts($idUser, $n=-1){
+        $query = "SELECT P.IDpost FROM POST P, INFOPOST I WHERE P.IDpost=I.IDpost AND P.IDuser=? ORDER BY date DESC";
+        if($n > 0){
+            $query .= " LIMIT ?";
+        }
+        $stmt = $this->prepare($query);
+        if($n > 0){
+            $stmt->bind_param('ii',$idUser, $n);
+        }
+        else {
+            $stmt->bind_param('i',$idUser);
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 }
 
 ?>
