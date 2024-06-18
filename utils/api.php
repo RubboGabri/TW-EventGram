@@ -18,6 +18,7 @@ else if (isset($_POST["op"]) && $_POST["op"] == "register" && isset($_POST["user
             registerLoggedUser($login_result[0]);
         }
     }
+    error_log(isUserLoggedIn() ? "Utente loggato" : "Utente non loggato");
     if(isUserLoggedIn()) {
         $result["esito"] = true;
     }

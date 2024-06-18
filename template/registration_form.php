@@ -23,7 +23,7 @@
             </form>
             <section class="mt-5">
                 <span>Hai già un account? </span>
-                <a href="login.php" class="link-primary">Accedi</a>
+                <a href="index.php" class="link-primary">Accedi</a>
             </section> 
         </div>
     </div>

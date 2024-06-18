@@ -16,7 +16,7 @@ function login(username, password) {
     formData.append('password', password);
     return axios.post('utils/api.php', formData).then(response => {
         if (response.data["esito"] === true) {
-            location.href = "../template/base.php";
+            location.href = "home.php";
         }
         return response.data;
     });

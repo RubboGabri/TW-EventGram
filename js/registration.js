@@ -23,13 +23,9 @@ async function register(username, password, confirmPassword) {
     formData.append('password', password);
 
     try {
-        const response = await axios.post('utils/api.php', formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            }
-        });
+        const response = await axios.post('utils/api.php', formData);
         if (response.data.esito === true) {
-            location.href = "../login.php";
+            location.href = "home.php";
             return { esito: true };
         } else {
             return response.data;
