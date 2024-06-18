@@ -26,6 +26,20 @@ CREATE TABLE Utenti (
      creationDate datetime DEFAULT CURRENT_TIMESTAMP
      );
 
+-- Tables structure for table `Locations`
+
+CREATE TABLE Locations (
+     IDlocation int PRIMARY KEY AUTO_INCREMENT,
+     name varchar(100) NOT NULL
+     );
+
+-- Tables structure for table `Categorie`
+
+CREATE TABLE Categorie (
+    IDcategory int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    name varchar(30) NOT NULL 
+    );
+
 -- Tables structure for table `Post`
 
 CREATE TABLE Post (
@@ -41,7 +55,8 @@ CREATE TABLE Post (
      IDcategoria int NOT NULL,
      minAge int DEFAULT NULL,
      FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser),
-     FOREIGN KEY (IDlocation) REFERENCES Location(IDlocation)
+     FOREIGN KEY (IDlocation) REFERENCES Locations(IDlocation),
+     FOREIGN KEY (IDcategoria) REFERENCES Categorie(IDcategory)
      );
 
 -- Tables structure for table `Commenti`
@@ -64,7 +79,7 @@ CREATE TABLE Follower (
      notification boolean DEFAULT TRUE,
      PRIMARY KEY (IDfollower, IDfollowed),
      FOREIGN KEY (IDfollower) REFERENCES Utenti(IDuser),
-     FOREIGN KEY (IDfollowed) REFERENCES Utenti(IDuser),
+     FOREIGN KEY (IDfollowed) REFERENCES Utenti(IDuser)
      );
 
 -- Tables structure for table `Notifiche`
@@ -78,7 +93,7 @@ CREATE TABLE Notifiche (
      date datetime DEFAULT CURRENT_TIMESTAMP,
      FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser),
      FOREIGN KEY (notifier) REFERENCES Utenti(IDuser),
-     FOREIGN KEY (IDpost) REFERENCES Post(IDpost),
+     FOREIGN KEY (IDpost) REFERENCES Post(IDpost)
      );
 
 -- Tables structure for table `Iscrizioni`
@@ -91,21 +106,7 @@ CREATE TABLE Iscrizioni (
      FOREIGN KEY (IDpost) REFERENCES Post(IDpost)
      );
 
--- Tables structure for table `Categorie`
-
-CREATE TABLE Categorie (
-    IDcategory int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    name varchar(30) NOT NULL, 
-    );
-
--- Tables structure for table `Location`
-
-CREATE TABLE Location (
-     IDlocation int PRIMARY KEY AUTO_INCREMENT,
-     name varchar(100) NOT NULL
-     );
-
--- Tables structure for table `Like`
+-- Tables structure for table `Likes`
 
 CREATE TABLE Likes (
      IDpost int NOT NULL,

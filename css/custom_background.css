@@ -1,0 +1,33 @@
+/* custom.css */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.gradient-background {
+    background: linear-gradient(to top right, #4fc3f7 0%, #28a745 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-custom {
+    background-color: #9b59b6; /* Viola più chiaro */
+    border: none;
+    color: white;
+    border-radius: 25px; /* Bordi rotondi */
+    padding: 10px 20px; /* Padding per il bottone */
+    width: 100%;
+    margin-top: 20px; /* Aggiungi margine superiore per aumentare lo spazio */
+    transition: background-color 0.3s ease; /* Transizione per l'effetto hover */
+}
+
+.btn-custom:hover {
+    background-color: #b57ec9; /* Viola più chiaro per l'hover */
+}
+
+.vh-100 {
+    height: 100vh;
+}
