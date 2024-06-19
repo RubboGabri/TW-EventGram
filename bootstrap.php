@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 define("UPLOAD_DIR", "./db/upload/");
 require_once("utils/functions.php");
 require_once("db/database.php");
@@ -14,10 +13,9 @@ if (!isUserLoggedIn()) {
         exit;
     }
 } else {
-    if ($current_file != 'home.php') {
+    if ($current_file != 'home.php' && $current_file != 'user_profile.php' && $current_file != 'api.php') {
         header("Location: home.php");
         exit;
     }
 }
 ?>
-dio porco

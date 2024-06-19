@@ -10,6 +10,11 @@
         <link href="css/custom_background.css" rel="stylesheet"/>
     </head>
     <body class="gradient-background">
+    <?php
+    if(isset($templateParams["navbar"])){
+        require($templateParams["navbar"]);
+    }
+    ?>
     <main class="<?php echo isset($templateParams["mainClass"]) ? $templateParams["mainClass"] : 'container'; ?>" style="margin-top: 8vh; margin-bottom: 10vh;">
         <?php if (isset($templateParams["main"])): ?>
             <?php require($templateParams["main"]); ?>

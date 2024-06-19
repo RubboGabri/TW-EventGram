@@ -1,3 +1,16 @@
+<style>
+        .header {
+            background-color: #6f42c1; /* Colore viola */
+            border-bottom: 1px solid #e0e0e0;
+        }
+</style>
+<header class="header">
+    <?php
+    if(isset($templateParams["sidebar"])){
+        require($templateParams["sidebar"]);
+    }
+    ?>
+</header>
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="col-12 col-md-8 col-lg-6 p-5 text-center">
         <form action="#" method="POST" class="p-0 m-0">
