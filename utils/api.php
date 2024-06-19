@@ -39,4 +39,8 @@ else if (isset($_POST["op"]) && $_POST["op"] == "login" && isset($_POST["usernam
     header('Content-Type: application/json');
     echo json_encode($result);
 }
+else if (isset($_POST["op"]) && $_POST["op"] == "logout") {
+    logout();
+}
+
 ?>

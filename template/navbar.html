@@ -1,4 +1,44 @@
+<style>
+    .navbar-item a {
+        position: relative;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    .navbar-item a .mask {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: hsla(0, 0%, 98%, 0.2);
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .navbar-item a:hover .mask {
+        opacity: 1;
+    }
+</style>
 <nav id="navBar" class="navbar">
+    
+    <div class="d-md-none container">
+        <ul class="border-top border-dark fixed-bottom navbar-nav d-flex flex-row bg-info" style="height: 7vh;">
+            <li class="d-flex justify-content-center p-2 navbar-item" style="min-width: 33.33%">
+                <a href="home.php">
+                    <img src="img/home.png" alt="Home" class="img-fluid" style="max-height: 30px"/>
+                </a>
+            </li>
+            <li class="d-flex justify-content-center p-2 navbar-item" style="min-width: 33.33%">
+                <a href="home.php">
+                    <img src="img/create.png" alt="Crea" class="img-fluid" style="max-height: 30px"/>
+                </a>
+            </li>
+            <li class="d-flex justify-content-center p-2 navbar-item" style="min-width: 33.33%">
+                <a href="user_profile.php">
+                    <img src="img/profile.png" alt="Profilo" class="img-fluid" style="max-height: 30px"/>
+                </a>
+            </li>
+        </ul>
+    </div>
+
     <div class="d-none d-md-block">
         <ul class="fixed-top col-1 col-lg-3 border-dark border-end d-flex flex-column bg-info text-dark p-3 navbar-nav" style="height: 100vh;">
             <li class="navbar-item d-flex justify-content-center">
@@ -6,29 +46,47 @@
             </li>
             <li class="navbar-item">
                 <a href="home.php" class="d-flex align-items-center my-4 p-1 text-decoration-none text-dark">
-                    <img src="img/home.png" alt="Home" class="img-fluid" style="max-height: 50px"/>
+                    <img src="img/home.png" alt="Home" class="img-fluid" style="max-height: 40px"/>
                     <span class="d-none d-lg-block ms-5 me-5 fs-5 fw-semibold">Home</span>
+                    <div class="mask rounded" style="background-color: hsla(0, 3%, 6%, 0.2)"></div>
                 </a>                
             </li>
             <li class="navbar-item">
                 <a href="home.php" class="d-flex align-items-center my-4 p-1 text-decoration-none text-dark">
-                    <img src="img/notification.png" alt="Notifiche" class="img-fluid" style="max-height: 50px"/>
+                    <img src="img/notification.png" alt="Notifiche" class="img-fluid" style="max-height: 40px"/>
                     <span class="d-none d-lg-block ms-5 me-5 fs-5 fw-semibold">Notifiche</span>
+                    <div class="mask rounded" style="background-color: hsla(0, 3%, 6%, 0.2)"></div>
                 </a>                
             </li>
             <li class="navbar-item">
                 <a href="home.php" class="d-flex align-items-center my-4 p-1 text-decoration-none text-dark">
-                    <img src="img/create.png" alt="Crea" class="img-fluid" style="max-height: 50px"/>
+                    <img src="img/create.png" alt="Crea" class="img-fluid" style="max-height: 40px"/>
                     <span class="d-none d-lg-block ms-5 me-5 fs-5 fw-semibold">Crea</span>
+                    <div class="mask rounded" style="background-color: hsla(0, 3%, 6%, 0.2)"></div>
                 </a>                
             </li>
             <li class="navbar-item">
-                <a href="home.php" class="d-flex align-items-center my-4 p-1 text-decoration-none text-dark">
-                    <img src="img/profile.png" alt="Profilo" class="img-fluid" style="max-height: 50px"/>
+                <a href="user_profile.php" class="d-flex align-items-center my-4 p-1 text-decoration-none text-dark">
+                    <img src="img/profile.png" alt="Profilo" class="img-fluid" style="max-height: 40px"/>
                     <span class="d-none d-lg-block ms-5 me-5 fs-5 fw-semibold">Profilo</span>
+                    <div class="mask rounded" style="background-color: hsla(0, 3%, 6%, 0.2)"></div>
                 </a>                
+            </li>
+            <li class="navbar-item">
+                <a href="index.php" onclick="logout()" class="d-flex align-items-center my-4 p-1 text-decoration-none text-danger">
+                    <img src="img/logout_red.PNG" alt="Esci" class="img-fluid" style="max-height: 40px"/>
+                    <span class="d-none d-lg-block ms-5 me-5 fs-5 fw-semibold">Esci</span>
+                    <div class="mask rounded" style="background-color: hsla(0, 3%, 6%, 0.2)"></div>
+                </a>
             </li>
         </ul>
     </div>
 </nav>
+<script>
+    function logout() {
+    const formData = new FormData();
+    formData.append('op', "logout");
+    axios.post('utils/api.php', formData);
+}
+</script>
 

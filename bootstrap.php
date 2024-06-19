@@ -5,7 +5,7 @@ require_once("utils/functions.php");
 require_once("db/database.php");
 $dbh = new DatabaseHelper("localhost", "root", "", "eventgramdb", 3306);
 $current_file = basename($_SERVER['PHP_SELF']);
-error_log("entrato in bootstrap da: " . $current_file);
+//error_log("entrato in bootstrap da: " . $current_file);
 
 if (!isUserLoggedIn()) {
     if ($current_file != 'login.php' && $current_file != 'register.php' && $current_file != 'api.php') {
