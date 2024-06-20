@@ -9,30 +9,43 @@
         <link rel="shortcut icon" type="image/png" href="img/AppIcon.png"/>
         <link href="css/custom_background.css" rel="stylesheet"/>
     </head>
+    <?php
+        if(isset($templateParams["header"])){
+            $header_offset = "pt-20";
+        }
+    ?>
     <body class="gradient-background">
-    <?php
-    if(isset($templateParams["navbar"])){
-        require($templateParams["navbar"]);
-    }
-    ?>
-    <main class="<?php echo isset($templateParams["mainClass"]) ? $templateParams["mainClass"] : 'container'; ?>" style="margin-top: 8vh; margin-bottom: 10vh;">
-        <?php if (isset($templateParams["main"])): ?>
-            <?php require($templateParams["main"]); ?>
-        <?php endif; ?>
-    </main>
-    <script>
-    <?php foreach($_GET as $key => $val) {
-        echo 'const '.$key.'="'.$val.'";';
-    }?>
-    </script>
-    <?php
-    if(isset($templateParams["js"])):
-        foreach($templateParams["js"] as $script):
-    ?>
-        <script src="<?php echo $script; ?>"></script>
-    <?php
+        <?php
+            if(isset($templateParams["header"])){
+                require($templateParams["header"]);
+            }
+        ?>
+        <?php
+            if(isset($templateParams["navbar"])){
+                require($templateParams["navbar"]);
+                $offset ="offset-md-1 offset-lg-3";
+            }
+        ?>
+        <main class="<?php echo $offset ?> mt-5">
+        <?php
+            if(isset($templateParams["main"])){
+                require($templateParams["main"]);
+            }
+            ?>
+        </main>
+        <script>
+        <?php foreach($_GET as $key => $val) {
+            echo 'const '.$key.'="'.$val.'";';
+        }?>
+        </script>
+        <?php
+        if(isset($templateParams["js"])):
+            foreach($templateParams["js"] as $script):
+        ?>
+            <script src="<?php echo $script; ?>"></script>
+        <?php
         endforeach;
-    endif;
-    ?>
-</body>
+        endif;
+        ?>
+    </body>
 </html>

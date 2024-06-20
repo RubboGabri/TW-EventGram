@@ -19,7 +19,7 @@ class DatabaseHelper {
     }
 
     public function getUserPosts($idUser, $n=-1){
-        $query = "SELECT P.IDpost FROM Post P, infopost I WHERE P.IDpost=I.IDpost AND P.IDuser=? ORDER BY date DESC";
+        $query = "SELECT P.IDpost FROM Post P, infopost I WHERE P.IDpost=I.IDpost AND P.IDuser=? ORDER BY postDate DESC";
         if($n > 0){
             $query .= " LIMIT ?";
         }
@@ -100,6 +100,26 @@ class DatabaseHelper {
             return false;
         }
     }   
+
+    public function getUserById($idUser){
+        $query = "SELECT * FROM Utenti WHERE IDuser=?";
+        $stmt = $this->prepare($query);
+        $stmt->bind_param('i',$idUser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getUserStats($IDuser){
+        $query = "SELECT P.numPost, FR.numFollower, FD.numFollowed FROM (SELECT COUNT(IDpost) AS numPost FROM Post WHERE IDuser=?) AS P,
+                    (SELECT COUNT(IDfollower) AS numFollower FROM Follower WHERE IDfollowed=?) AS FR,
+                    (SELECT COUNT(IDfollowed) AS numFollowed FROM Follower WHERE IDfollower=?) AS FD";
+        $stmt = $this->prepare($query);
+        $stmt->bind_param('sss',$IDuser,$IDuser,$IDuser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 }
 
 ?>

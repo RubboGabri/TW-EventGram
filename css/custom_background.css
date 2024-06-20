@@ -1,16 +1,7 @@
 /* custom.css */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
 
 .gradient-background {
     background: linear-gradient(to top right, #4fc3f7 0%, #28a745 100%);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .btn-custom {
@@ -28,6 +19,4 @@ html, body {
     background-color: #b57ec9; /* Viola più chiaro per l'hover */
 }
 
-.vh-100 {
-    height: 100vh;
-}
+

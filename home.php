@@ -1,8 +1,9 @@
 <?php
 require_once 'bootstrap.php';
-$templateParams["sidebar"] = "template/navbar.html";
-$templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js");
+$templateParams["navbar"] = "template/navbar.html";
+$templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js", "js/logout.js");
 $templateParams["title"] = "EventGram";
-$templateParams["main"] = "homePage.php";
+$templateParams["main"] = "home_feed.php";
+$templateParams["user"] = $_SESSION["idUser"];
 require_once 'template/base.php';
 ?>
