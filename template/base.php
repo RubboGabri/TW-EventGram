@@ -30,7 +30,7 @@
 </head>
 <?php
     if(isset($templateParams["header"])){
-        $header_offset = "pt-20";
+        $header_offset = "mt-5 mt-md-0";
     }
 ?>
 <body class="gradient-background">
@@ -42,10 +42,10 @@
     <?php
         if(isset($templateParams["navbar"])){
             require($templateParams["navbar"]);
-            $offset ="offset-md-1 offset-lg-3";
+            $offset = "offset-md-1 offset-lg-3";
         }
     ?>
-    <main class="<?php echo $offset ?> mt-5">
+    <main class="<?php echo $offset ?> <?php echo $header_offset ?>">
     <?php
         if(isset($templateParams["main"])){
             require($templateParams["main"]);

@@ -36,11 +36,11 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function insertUser($username, $password, $info="NULL", $profilePic="NULL"){
-        $stmt = $this->prepare("INSERT INTO Utenti (username, password, salt, info, profilePic) VALUES (?, ?, ?, ?, ?)");
+    public function insertUser($username, $password){
+        $stmt = $this->prepare("INSERT INTO Utenti (username, password, salt) VALUES (?, ?, ?)");
         $random_salt = hash('sha512', uniqid(mt_rand(1, mt_getrandmax()), true));
         $password = hash('sha512', $password.$random_salt);
-        $stmt->bind_param('sssss',$username, $password, $random_salt, $info, $profilePic);
+        $stmt->bind_param('sss',$username, $password, $random_salt);
         $stmt->execute();
         return $stmt->insert_id;
     }
