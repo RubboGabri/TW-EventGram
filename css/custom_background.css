@@ -18,3 +18,16 @@
 .btn-custom:hover {
     background-color: #b57ec9; /* Lighter purple for hover */
 }
+
+.list-group-item {
+    border-radius: 10px; /* Angoli arrotondati */
+    background-color: rgba(184, 184, 184, 0.4); /* Colore grigio con bassa opacità */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombra sotto ogni riga */
+    margin-bottom: 10px; /* Spazio tra le righe */
+    border: none; /* Rimuovere il bordo predefinito */
+}
+
+.list-group-item img {
+    max-height: 40px;
+    margin-right: 15px;
+}

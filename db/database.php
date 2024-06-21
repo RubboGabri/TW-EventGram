@@ -121,9 +121,19 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
- /*   public function inserNotification($type, $IDuser, $notifier, $IDpost = null) {
+    public function inserNotification($type, $IDuser, $notifier, $IDpost = null) {
         $stmt = $this->prepare("INSERT INTO Notifiche (type, IDuser, notifier, IDpost) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param();
-    }*/
+        $stmt->bind_param('siii', $type, $IDuser, $notifier, $IDpost);
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
+
+    public function getNotifications($IDuser) {
+        $stmt = $this->prepare("SELECT * FROM Notifiche WHERE IDuser = ? ORDER BY date DESC");
+        $stmt->bind_param('i', $IDuser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 }
 ?>

@@ -12,7 +12,7 @@ if (!isUserLoggedIn()) {
         exit;
     }
 } else {
-    if ($current_file != 'home.php' && $current_file != 'user.php' && $current_file != 'api.php') {
+    if ($current_file != 'home.php' && $current_file != 'user.php' && $current_file != 'api.php' && $current_file != 'notification.php') {
         header("Location: home.php");
         exit;
     }
