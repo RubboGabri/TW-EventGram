@@ -5,18 +5,16 @@
 }
 
 .btn-custom {
-    background-color: #9b59b6; /* Viola più chiaro */
+    background-color: #9b59b6; /* Light purple */
     border: none;
     color: white;
-    border-radius: 25px; /* Bordi rotondi */
-    padding: 10px 20px; /* Padding per il bottone */
+    border-radius: 25px; /* Rounded corners */
+    padding: 10px 20px; /* Button padding */
     width: 100%;
-    margin-top: 20px; /* Aggiungi margine superiore per aumentare lo spazio */
-    transition: background-color 0.3s ease; /* Transizione per l'effetto hover */
+    margin-top: 20px; /* Add top margin for spacing */
+    transition: background-color 0.3s ease; /* Transition for hover effect */
 }
 
 .btn-custom:hover {
-    background-color: #b57ec9; /* Viola più chiaro per l'hover */
+    background-color: #b57ec9; /* Lighter purple for hover */
 }
-
-

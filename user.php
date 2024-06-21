@@ -13,7 +13,6 @@ if (isset($_GET["id"])) {
 $templateParams["header"] = "header_profile.php";
 
 $userData = $dbh->getUserById($templateParams["user"]);
-
 $user = $userData[0];
 
 $templateParams["title"] = $user["username"] . " - EventGram";
@@ -22,5 +21,4 @@ $userPosts = $dbh->getUserPosts($templateParams["user"]);
 $userStat = $dbh->getUserStats($templateParams["user"]);
 
 require_once("template/base.php");
-
 ?>

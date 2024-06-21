@@ -7,19 +7,20 @@
             <p class="text-danger"></p>
             <div class="form-group mb-3">
                 <label for="username" class="fs-6 fw-semibold d-block text-start">Username:</label>
-                <input type="text" id="username" name="username" placeholder="Username" class="form-control"/>
+                <input type="text" id="username" name="username" placeholder="Username" class="form-control" required>
             </div>
             <div class="form-group mb-3">
                 <label for="password" class="fs-6 fw-semibold d-block text-start">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Password" class="form-control"/>
+                <input type="password" id="password" name="password" placeholder="Password" class="form-control" required>
             </div>
             <div class="form-group mb-3">
-                <input type="submit" name="submit" value="Accedi" class="btn btn-custom w-100"/>
+                <input type="submit" name="submit" value="Login" class="btn btn-custom w-100">
             </div>
         </form>
         <section class="mt-5">
-            <span>Non hai un account? </span>
-            <a href="../register.php" class="link-primary">Registrati</a>
-        </section>
+            <span>Don't have an account? </span>
+            <h2 class="d-none">Login Section</h2>
+            <a href="register.php" class="link-primary">Register</a>
+        </section> 
     </div>
 </div>

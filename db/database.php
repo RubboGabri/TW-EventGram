@@ -120,6 +120,10 @@ class DatabaseHelper {
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
-}
 
+ /*   public function inserNotification($type, $IDuser, $notifier, $IDpost = null) {
+        $stmt = $this->prepare("INSERT INTO Notifiche (type, IDuser, notifier, IDpost) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param();
+    }*/
+}
 ?>
