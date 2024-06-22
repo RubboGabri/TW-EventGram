@@ -133,6 +133,11 @@ switch ($_REQUEST['op']) {
             $result["esito"] = true;
         } else {
             $result["errore"] = "Errore nella creazione del post.";
+        }
+        header('Content-Type: application/json');
+        echo json_encode($result);
+        break;
+
     case 'follow':
         if (isset($_SESSION['idUser']) && isset($_POST["idFollowed"])) {
             $dbh->insertFollower($loggedUser, $_POST["idFollowed"]);
