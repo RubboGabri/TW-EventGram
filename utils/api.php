@@ -133,6 +133,39 @@ switch ($_REQUEST['op']) {
             $result["esito"] = true;
         } else {
             $result["errore"] = "Errore nella creazione del post.";
+    case 'follow':
+        if (isset($_SESSION['idUser']) && isset($_POST["idFollowed"])) {
+            $dbh->insertFollower($loggedUser, $_POST["idFollowed"]);
+            $result["esito"] = true;
+            $result["errore"] = "Nessuno";
+        
+            $dbh->notifyFollow($loggedUser, $_POST["idFollowed"]);
+        
+            header('Content-Type: application/json');
+            echo json_encode($result);
+        }
+        break;
+
+    case 'unfollow':
+        if (isset($_SESSION['idUser']) && isset($_POST["idFollowed"])) {
+            $dbh->removeFollower($loggedUser, $_POST["idFollowed"]);
+            $result["esito"] = true;
+            $result["errore"] = "Nessuno";
+        
+            header('Content-Type: application/json');
+            echo json_encode($result);
+        }
+        break;
+
+    case 'updateProfile':
+        if (isset($_POST["username"]) && isset($_POST["info"])) {
+            $result["esito"] = false;
+            $result["errore"] = "Non so!";
+            if(isset($_POST["pic"])) $result["esito"] = $dbh->updateUserWithPic($_SESSION["idUser"], $_POST["username"], $_POST["bio"], $_POST["pic"]);
+            else $result["esito"] = $dbh->updateUser($_SESSION["idUser"], $_POST["username"], $_POST["bio"]);
+            
+            header('Content-Type: application/json');
+            echo json_encode($result);
         }
         break;
 
