@@ -43,21 +43,22 @@ CREATE TABLE Categorie (
 -- Tables structure for table `Post`
 
 CREATE TABLE Post (
-     IDpost int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-     img mediumblob,
-     title char(50) NOT NULL, 
-     description text NOT NULL, 
-     postDate datetime DEFAULT CURRENT_TIMESTAMP,
-     eventDate datetime NOT NULL,
-     IDuser int NOT NULL,
-     IDlocation int NOT NULL,
-     price int NOT NULL,
-     IDcategoria int NOT NULL,
-     minAge int DEFAULT NULL,
-     FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser),
-     FOREIGN KEY (IDlocation) REFERENCES Locations(IDlocation),
-     FOREIGN KEY (IDcategoria) REFERENCES Categorie(IDcategory)
-     );
+    IDpost int PRIMARY KEY AUTO_INCREMENT,
+    img mediumblob,
+    title char(50) NOT NULL,
+    description text NOT NULL,
+    postDate datetime DEFAULT CURRENT_TIMESTAMP,
+    eventDate datetime NOT NULL,
+    IDuser int NOT NULL,
+    IDlocation int NOT NULL,
+    price int NOT NULL,
+    IDcategoria int NOT NULL,
+    minAge int DEFAULT NULL,
+    FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser),
+    FOREIGN KEY (IDlocation) REFERENCES Locations(IDlocation),
+    FOREIGN KEY (IDcategoria) REFERENCES Categorie(IDcategory)
+);
+
 
 -- Tables structure for table `Commenti`
 

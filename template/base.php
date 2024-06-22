@@ -52,10 +52,11 @@
         }
     ?>
     </main>
+
     <script>
-    <?php foreach($_GET as $key => $val) {
-        echo 'const '.$key.'="'.$val.'";';
-    }?>
+    <?php foreach ($_GET as $key => $val): ?>
+        const <?php echo $key; ?> = "<?php echo $val; ?>";
+    <?php endforeach; ?>
     </script>
     <?php
     if(isset($templateParams["js"])):

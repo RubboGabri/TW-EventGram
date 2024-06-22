@@ -1,6 +1,6 @@
 <?php
 class DatabaseHelper {
-    private $db;
+    public $db;
 
     public function __construct($servername, $username, $password, $dbname, $port) {
         $this->db = new mysqli($servername, $username, $password, $dbname, $port);
@@ -32,7 +32,6 @@ class DatabaseHelper {
         }
         $stmt->execute();
         $result = $stmt->get_result();
-
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
@@ -80,23 +79,21 @@ class DatabaseHelper {
         }
         return $result;
     }
-    
+
     private function checkBruteForceAttack($IDuser) {
         $now = time();
         $valid_attempts = $now - (60 * 60);
-    
+
         if ($stmt = $this->prepare("SELECT attemptNum FROM Login_attempts WHERE IDuser = ? AND attemptNum > ?")) {
             $stmt->bind_param('is', $IDuser, $valid_attempts);
             $stmt->execute();
             $stmt->store_result();
-            // Verifico l'esistenza di più di 10 tentativi di login falliti nell'ultima ora.
             if ($stmt->num_rows > 10) {
                 return true;
             } else {
                 return false;
             }
         } else {
-            // Gestione degli errori di preparazione della query
             return false;
         }
     }   
@@ -131,6 +128,51 @@ class DatabaseHelper {
     public function getNotifications($IDuser) {
         $stmt = $this->prepare("SELECT * FROM Notifiche WHERE IDuser = ? ORDER BY date DESC");
         $stmt->bind_param('i', $IDuser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+}
+?>
+    }
+
+    public function getAllPosts(){
+        $query = "SELECT P.IDpost, P.title, P.description, P.eventDate, P.img, U.username, L.name AS location, C.name AS category
+                FROM Post P
+                JOIN Utenti U ON P.IDuser = U.IDuser
+                JOIN Locations L ON P.IDlocation = L.IDlocation
+                JOIN Categorie C ON P.IDcategoria = C.IDcategory
+                ORDER BY P.postDate DESC";
+        $stmt = $this->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function createPost($imgData, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge){
+        $query = "INSERT INTO Post (img, title, description, eventDate, IDuser, IDlocation, price, IDcategoria, minAge) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $this->prepare($query);
+        // Correct the order of parameters in the bind_param function
+        $stmt->bind_param('ssssiiisi', $imgData, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+
+    public function getAllCategories(){
+        $query = "SELECT * FROM Categorie";
+        $stmt = $this->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getAllLocations(){
+        $query = "SELECT * FROM Locations";
+        $stmt = $this->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
