@@ -42,7 +42,7 @@
         </div>
         <div class="form-group mt-3">
             <label for="img">Immagine:</label>
-            <input type="file" class="form-control" id="img" name="img">
+            <input type="file" accept=".jpg,.jpeg,.png" class="form-control" id="img" name="img">
         </div>
         <button type="submit" class="btn btn-primary mt-4 w-100">Crea Post</button>
     </form>

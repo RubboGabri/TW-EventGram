@@ -4,8 +4,12 @@
     </span>
     <div class="row w-100 pt-5">
         <picture class="col-4 text-start text-md-end">
-            <img src="<?php if ($userData["profilePic"] != NULL) echo $user['profilePic']; else echo 'img/profile.png'; ?>" 
-                 alt="Profile Picture" class="img-fluid" style="max-height: 100px">
+            <img src="<?php if ($user["profilePic"] != NULL) {
+                                $base64Image = base64_encode($user['profilePic']);
+                                $imageSrc = 'data:image/jpeg;base64,' . $base64Image;
+                                echo $imageSrc;
+                            } else echo 'img/profile.png'; ?>" 
+                        alt="Profile Picture" class="img-fluid" style="max-height: 100px">
         </picture>
         <div class="col-8 d-flex align-items-center pe-0">
             <div class="row text-center w-100">

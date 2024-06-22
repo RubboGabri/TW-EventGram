@@ -159,18 +159,21 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function createPost($imgData, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge){
+    public function createPost($imgFile, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge){
         $query = "INSERT INTO Post (img, title, description, eventDate, IDuser, IDlocation, price, IDcategoria, minAge) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->prepare($query);
-        // Correct the order of parameters in the bind_param function
-        $stmt->bind_param('ssssiiisi', $imgData, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge);
+        // Bind all parameters including the blob data
+        $stmt->bind_param('bssssiisi', $imgFile, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge);
+    
+        // Send the actual blob data for the first parameter
+        $stmt->send_long_data(0, $imgFile);
+    
         if ($stmt->execute()) {
             return true;
         } else {
             return false;
         }
-    }
-    
+    }     
 
     public function getAllCategories(){
         $query = "SELECT * FROM Categorie";
