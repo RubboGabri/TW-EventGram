@@ -132,9 +132,6 @@ class DatabaseHelper {
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
-}
-?>
-    }
 
     public function getAllPosts(){
         $query = "SELECT P.IDpost, P.title, P.description, P.eventDate, P.img, U.username, L.name AS location, C.name AS category

@@ -1,48 +1,4 @@
-<style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden; /* Previene lo scroll orizzontale */
-    }
-    .container{
-        max-width: 100vw;
-        box-sizing: border-box;
-        padding: 0 20px;
-        margin-top: auto;
-    }
-    *, *::before, *::after {
-        box-sizing: inherit;
-    }
-    .text-center {
-        text-align: center;
-    }
-    .mb-4 {
-        margin-bottom: 1.5rem;
-    }
-    h1 {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: 2.5rem;
-        color: #06192d;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
-    .back-button a {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        margin: 20px 0;
-        color: #06192d; /* Cambia questo colore a seconda del tuo schema di colori */
-        font-weight: bold;
-        text-decoration: none;
-    }
-    .back-button i {
-        margin-right: 8px;
-    }
-</style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<div class="back-button">
-    <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i> Indietro</a>
-</div>
-<div class="container mt-5">
+<div class="container min-vh-100 d-flex flex-column ps-4">
     <h1 class="text-center mb-4">Crea un nuovo Post</h1>
     <form action="#" method="post" enctype="multipart/form-data" class="w-75 mx-auto">
         <p class="text-danger"></p>
