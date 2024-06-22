@@ -102,8 +102,7 @@ class DatabaseHelper {
     }   
 
     public function getUserById($idUser){
-        $query = "SELECT * FROM Utenti WHERE IDuser=?";
-        $stmt = $this->prepare($query);
+        $stmt = $this->prepare("SELECT * FROM Utenti WHERE IDuser=?");
         $stmt->bind_param('i',$idUser);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -125,5 +124,42 @@ class DatabaseHelper {
         $stmt = $this->prepare("INSERT INTO Notifiche (type, IDuser, notifier, IDpost) VALUES (?, ?, ?, ?)");
         $stmt->bind_param();
     }*/
+
+    public function isFollowing($IDfollower, $IDfollowed){
+        $stmt = $this->prepare("SELECT * FROM Follower WHERE IDfollower=? AND IDfollowed=?");
+        $stmt->bind_param('ii',$IDfollower,$IDfollowed);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->num_rows > 0;
+    }
+
+    public function insertFollower($IDfollower, $IDfollowed){
+        $stmt = $this->prepare("INSERT INTO Follower(IDfollower, IDfollowed) VALUES (?,?)");
+        $stmt->bind_param('ii', $IDfollower, $IDfollowed);
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
+
+    public function removeFollower($IDfollower, $IDfollowed){
+        $stmt = $this->prepare("DELETE FROM Follower WHERE IDfollower=? AND IDfollowed=?");
+        $stmt->bind_param('ii', $IDfollower, $IDfollowed);
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
+
+    public function updateUser($IDuser, $username, $info, $profilePic = null){
+        if ($profilePic === null) {
+            $query = "UPDATE Utenti SET username=?, info=? WHERE IDuser=?";
+            $stmt = $this->prepare($query);
+            $stmt->bind_param('ssi', $username, $info, $IDuser);
+        } else {
+            $query = "UPDATE Utenti SET username=?, info=?, profilePic=? WHERE IDuser=?";
+            $stmt = $this->prepare($query);
+            $stmt->bind_param('sssi', $username, $info, $profilePic, $IDuser);
+        }
+    
+        return $stmt->execute();
+    }
+    
 }
 ?>
