@@ -55,40 +55,6 @@ switch ($_REQUEST['op']) {
         logout();
         break;
 
-    case 'getNotifications':
-        $notifications = $dbh->getNotifications($loggedUser);
-
-        // Raggruppa le notifiche per periodo di tempo
-        $groupedNotifications = [
-            "today" => [],
-            "lastWeek" => [],
-            "lastMonth" => [],
-            "earlier" => []
-        ];
-
-        $now = new DateTime();
-        foreach ($notifications as $notification) {
-            $notificationDate = new DateTime($notification['date']);
-            $interval = $now->diff($notificationDate);
-
-            $userInfo = $dbh->getUserById($notification['notifier']);
-            $user = $userInfo[0];
-            $notification['notifier_username'] = $user['username'];
-
-            if ($interval->days == 0) {
-                $groupedNotifications["today"][] = $notification;
-            } elseif ($interval->days <= 7) {
-                $groupedNotifications["lastWeek"][] = $notification;
-            } elseif ($interval->days <= 30) {
-                $groupedNotifications["lastMonth"][] = $notification;
-            } else {
-                $groupedNotifications["earlier"][] = $notification;
-            }
-        }
-
-        echo json_encode($groupedNotifications);
-        break;
-
     case 'createPost':
         $result["esito"] = false;
         $result["errore"] = "";
