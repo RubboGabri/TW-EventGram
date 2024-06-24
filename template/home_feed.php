@@ -1,27 +1,62 @@
 <style>
-        .header {
-            background-color: #6f42c1; /* Colore viola */
-            border-bottom: 1px solid #e0e0e0;
-        }
-</style>
-<header class="header">
-    <?php
-    if(isset($templateParams["sidebar"])){
-        require($templateParams["sidebar"]);
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    ?>
-</header>
+
+    .card-title {
+        font-size: 1.5rem;
+    }
+
+    .card-subtitle {
+        font-size: 1.25rem;
+    }
+
+    .card-text {
+        font-size: 1.25rem;
+    }
+
+    .card-footer {
+        font-size: 1.25rem;
+    }
+    .card-link { 
+        text-decoration: none;
+    }
+</style>
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="col-12 col-md-8 col-lg-6 p-5 text-center">
-        <form action="#" method="POST" class="p-0 m-0">
-            <div class="d-flex justify-content-center mb-4">
-                <img src="img/logo.PNG" alt="Logo" style="width: 200px; height: auto;">
+    <div class="row">
+        <?php foreach ($templateParams["posts"] as $post): ?>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <?php if ($post['img']): ?>
+                        <img src="data:image/jpeg;base64,<?php echo base64_encode($post['img']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($post['title']); ?>">
+                    <?php endif; ?>
+                    <div class="card-body">
+                        <h5 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h5>
+                        <h6 class="card-subtitle mb-2 text-muted"><?php echo htmlspecialchars($post['location']); ?></h6>
+                        <p class="card-text"><?php echo htmlspecialchars($post['description']); ?></p>
+                        <p class="card-text"><small class="text-muted"><?php echo htmlspecialchars($post['eventDate']); ?></small></p>
+                        <p class="card-text">Luogo: <?php echo htmlspecialchars($post['location']); ?></p>
+                        <p class="card-text">Categoria: <?php echo htmlspecialchars($post['category']); ?></p>
+                        <p class="card-text">Prezzo: <?php echo htmlspecialchars($post['price']); ?>€</p>
+                        <p class="card-text">Età minima: <?php echo htmlspecialchars($post['minAge']); ?> anni</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <div>
+                            <a href="#" class="card-link">
+                                <img src="img/like_outlined.png" alt="Like" class="img-fluid" style="max-height: 20px"/>
+                                <span><?php echo htmlspecialchars($post['numLikes']); ?></span>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#" class="card-link">
+                                <img src="img/comment.png" alt="Comment" class="img-fluid" style="max-height: 20px"/>
+                                <span><?php echo htmlspecialchars($post['numComments']); ?></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p class="text-danger"></p>
-            <div class="form-group mb-3">
-                <label for="homefeed" class="fs-6 fw-semibold d-block text-start">homefeed:</label>
-                <input type="text" id="username" name="username" placeholder="Username" class="form-control"/>
-            </div>
-        </form>
+        <?php endforeach; ?>
     </div>
 </div>

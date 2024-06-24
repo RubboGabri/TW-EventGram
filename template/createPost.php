@@ -1,48 +1,24 @@
 <style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden; /* Previene lo scroll orizzontale */
-    }
-    .container{
-        max-width: 100vw;
-        box-sizing: border-box;
-        padding: 0 20px;
-        margin-top: auto;
-    }
-    *, *::before, *::after {
-        box-sizing: inherit;
-    }
-    .text-center {
-        text-align: center;
-    }
-    .mb-4 {
-        margin-bottom: 1.5rem;
-    }
-    h1 {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: 2.5rem;
-        color: #06192d;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
-    .back-button a {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        margin: 20px 0;
-        color: #06192d; /* Cambia questo colore a seconda del tuo schema di colori */
-        font-weight: bold;
-        text-decoration: none;
-    }
-    .back-button i {
-        margin-right: 8px;
-    }
-</style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<div class="back-button">
-    <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i> Indietro</a>
-</div>
-<div class="container mt-5">
+        /* Aggiungiamo un po' di margine inferiore per evitare che il pulsante venga coperto da altri elementi */
+        form {
+            margin-bottom: 80px;
+        }
+
+        /* Assicuriamoci che gli input e il bottone si adattino allo schermo */
+        .form-control, .btn {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Assicuriamoci che il container si estenda completamente su dispositivi mobili */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+<div class="container min-vh-100 d-flex flex-column ps-4">
     <h1 class="text-center mb-4">Crea un nuovo Post</h1>
     <form action="#" method="post" enctype="multipart/form-data" class="w-75 mx-auto">
         <p class="text-danger"></p>
@@ -86,7 +62,7 @@
         </div>
         <div class="form-group mt-3">
             <label for="img">Immagine:</label>
-            <input type="file" class="form-control" id="img" name="img">
+            <input type="file" accept=".jpg,.jpeg,.png" class="form-control" id="img" name="img">
         </div>
         <button type="submit" class="btn btn-primary mt-4 w-100">Crea Post</button>
     </form>

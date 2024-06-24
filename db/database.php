@@ -19,7 +19,7 @@ class DatabaseHelper {
     }
 
     public function getUserPosts($idUser, $n=-1){
-        $query = "SELECT P.IDpost FROM Post P, infopost I WHERE P.IDpost=I.IDpost AND P.IDuser=? ORDER BY date DESC";
+        $query = "SELECT P.IDpost FROM Post P, infopost I WHERE P.IDpost=I.IDpost AND P.IDuser=? ORDER BY postDate DESC";
         if($n > 0){
             $query .= " LIMIT ?";
         }
@@ -35,11 +35,11 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function insertUser($username, $password, $info="NULL", $profilePic="NULL"){
-        $stmt = $this->prepare("INSERT INTO Utenti (username, password, salt, info, profilePic) VALUES (?, ?, ?, ?, ?)");
+    public function insertUser($username, $password){
+        $stmt = $this->prepare("INSERT INTO Utenti (username, password, salt) VALUES (?, ?, ?)");
         $random_salt = hash('sha512', uniqid(mt_rand(1, mt_getrandmax()), true));
         $password = hash('sha512', $password.$random_salt);
-        $stmt->bind_param('sssss',$username, $password, $random_salt, $info, $profilePic);
+        $stmt->bind_param('sss',$username, $password, $random_salt);
         $stmt->execute();
         return $stmt->insert_id;
     }
@@ -96,33 +96,100 @@ class DatabaseHelper {
         } else {
             return false;
         }
-    }
+    }   
 
-    public function getAllPosts(){
-        $query = "SELECT P.IDpost, P.title, P.description, P.eventDate, P.img, U.username, L.name AS location, C.name AS category
-                FROM Post P
-                JOIN Utenti U ON P.IDuser = U.IDuser
-                JOIN Locations L ON P.IDlocation = L.IDlocation
-                JOIN Categorie C ON P.IDcategoria = C.IDcategory
-                ORDER BY P.postDate DESC";
-        $stmt = $this->prepare($query);
+    public function getUserById($idUser){
+        $stmt = $this->prepare("SELECT * FROM Utenti WHERE IDuser=?");
+        $stmt->bind_param('i',$idUser);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function createPost($imgData, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge){
+    public function getUserStats($IDuser){
+        $query = "SELECT P.numPost, FR.numFollower, FD.numFollowed FROM (SELECT COUNT(IDpost) AS numPost FROM Post WHERE IDuser=?) AS P,
+                    (SELECT COUNT(IDfollower) AS numFollower FROM Follower WHERE IDfollowed=?) AS FR,
+                    (SELECT COUNT(IDfollowed) AS numFollowed FROM Follower WHERE IDfollower=?) AS FD";
+        $stmt = $this->prepare($query);
+        $stmt->bind_param('sss',$IDuser,$IDuser,$IDuser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    /*public function inserNotification($type, $IDuser, $notifier, $IDpost = null) {
+        $stmt = $this->prepare("INSERT INTO Notifiche (type, IDuser, notifier, IDpost) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param('siii', $type, $IDuser, $notifier, $IDpost);
+        $stmt->bind_param();
+    }*/
+
+    public function isFollowing($IDfollower, $IDfollowed){
+        $stmt = $this->prepare("SELECT * FROM Follower WHERE IDfollower=? AND IDfollowed=?");
+        $stmt->bind_param('ii',$IDfollower,$IDfollowed);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->num_rows > 0;
+    }
+
+    public function insertFollower($IDfollower, $IDfollowed){
+        $stmt = $this->prepare("INSERT INTO Follower(IDfollower, IDfollowed) VALUES (?,?)");
+        $stmt->bind_param('ii', $IDfollower, $IDfollowed);
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
+
+    public function getNotifications($IDuser) {
+        $stmt = $this->prepare("SELECT * FROM Notifiche WHERE IDuser = ? ORDER BY date DESC");
+        $stmt->bind_param('i', $IDuser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getAllPosts() {
+        $query = "
+            SELECT 
+                P.IDpost, 
+                P.img, 
+                P.title, 
+                P.description, 
+                P.eventDate, 
+                P.IDuser, 
+                P.IDlocation, 
+                P.price, 
+                P.IDcategoria, 
+                P.minAge, 
+                L.name AS location, 
+                C.name AS category,
+                (SELECT COUNT(*) FROM Likes WHERE Likes.IDpost = P.IDpost) as numLikes,
+                (SELECT COUNT(*) FROM Commenti WHERE Commenti.IDpost = P.IDpost) as numComments
+            FROM Post P 
+            JOIN Locations L ON P.IDlocation = L.IDlocation 
+            JOIN Categorie C ON P.IDcategoria = C.IDcategory 
+            ORDER BY P.postDate DESC
+        ";
+        $stmt = $this->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    
+
+    public function createPost($imgFile, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge){
         $query = "INSERT INTO Post (img, title, description, eventDate, IDuser, IDlocation, price, IDcategoria, minAge) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->prepare($query);
-        // Correct the order of parameters in the bind_param function
-        $stmt->bind_param('ssssiiisi', $imgData, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge);
+        // Bind all parameters including the blob data
+        $stmt->bind_param('bssssiisi', $imgFile, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge);
+    
+        // Send the actual blob data for the first parameter
+        $stmt->send_long_data(0, $imgFile);
+    
         if ($stmt->execute()) {
             return true;
         } else {
             return false;
         }
-    }
-    
+    }     
 
     public function getAllCategories(){
         $query = "SELECT * FROM Categorie";
@@ -139,5 +206,26 @@ class DatabaseHelper {
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+    public function removeFollower($IDfollower, $IDfollowed){
+        $stmt = $this->prepare("DELETE FROM Follower WHERE IDfollower=? AND IDfollowed=?");
+        $stmt->bind_param('ii', $IDfollower, $IDfollowed);
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
+
+    public function updateUser($IDuser, $username, $info, $profilePic = null){
+        if ($profilePic === null) {
+            $query = "UPDATE Utenti SET username=?, info=? WHERE IDuser=?";
+            $stmt = $this->prepare($query);
+            $stmt->bind_param('ssi', $username, $info, $IDuser);
+        } else {
+            $query = "UPDATE Utenti SET username=?, info=?, profilePic=? WHERE IDuser=?";
+            $stmt = $this->prepare($query);
+            $stmt->bind_param('sssi', $username, $info, $profilePic, $IDuser);
+        }
+    
+        return $stmt->execute();
+    }
+    
 }
 ?>

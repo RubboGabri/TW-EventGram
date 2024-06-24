@@ -54,17 +54,18 @@ if (isset($_GET["op"]) && $_GET["op"] == "getLoggedUser") {
     $price = $_POST['price'];
     $minAge = isset($_POST['minAge']) ? $_POST['minAge'] : null;
 
+    // Gestione del caricamento dell'immagine
     $imgData = null;
-    if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
-        $imgTmpPath = $_FILES['img']['tmp_name'];
+    if (isset($_FILES['imgFile']) && $_FILES['imgFile']['error'] === UPLOAD_ERR_OK) {
+        $imgTmpPath = $_FILES['imgFile']['tmp_name'];
         $imgData = file_get_contents($imgTmpPath); // Ottieni il contenuto dell'immagine
 
         // Aggiungi log per verificare i dati dell'immagine
         error_log("Lunghezza dati immagine: " . strlen($imgData));
-        error_log("Dati immagine: " . bin2hex(substr($imgData, 0, 32))); // Log dei primi 32 byte dell'immagine in formato esadecimale
     } else {
-        error_log("Errore durante il caricamento dell'immagine: " . (isset($_FILES['img']['error']) ? $_FILES['img']['error'] : 'File non caricato'));
+        error_log("Errore durante il caricamento dell'immagine: " . $_FILES['imgFile']['error']);
     }
+
     // Log dei parametri per il debug
     error_log("Title: " . $title);
     error_log("Description: " . $description);

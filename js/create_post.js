@@ -11,33 +11,22 @@ document.querySelector("main form").addEventListener("submit", async function (e
 
     // Gestione del caricamento dell'immagine
     const imgFile = document.querySelector("#img").files[0];
-    let imgData = null;
-    
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-        imgData = reader.result.split(',')[1]; // Ottieni solo i dati base64 dell'immagine
-        const result = await createPost(title, description, eventDate, location, category, price, minAge, imgData);
-        handlePostCreationResult(result);
-    };
-    
-    if (imgFile) {
-        reader.readAsDataURL(imgFile);
-    } else {
-        const result = await createPost(title, description, eventDate, location, category, price, minAge, imgData);
-        handlePostCreationResult(result);
-    }
+
+    const result = await createPost(title, description, eventDate, location, category, price, minAge, imgFile);
+    handlePostCreationResult(result);
 });
 
 function handlePostCreationResult(result) {
-    if (result.esito === false) {
-        document.querySelector("form > p").innerText = result.errore;
+    if (result && result.esito === false) {
+        document.querySelector("form > p").innerText = result.errore || "An error occurred.";
+    } else if (result && result.esito === true) {
+        window.location.href = "home.php";
     } else {
-        window.location.href = "home.php"; // Ensure window.location.href is used
+        document.querySelector("form > p").innerText = "Unexpected error: the server response is not in the expected format.";
     }
 }
 
-// Funzione per creare un post
-async function createPost(title, description, eventDate, location, category, price, minAge, imgData) {
+async function createPost(title, description, eventDate, location, category, price, minAge, imgFile) {
     const formData = new FormData();
     formData.append('op', "createPost");
     formData.append('title', title);
@@ -49,14 +38,34 @@ async function createPost(title, description, eventDate, location, category, pri
     if (minAge !== null) {
         formData.append('minAge', minAge);
     }
-    if (imgData !== null) {
-        formData.append('img', imgData);
+
+    if (imgFile) {
+        formData.append('imgFile', imgFile); // Append the binary file directly
     }
 
     try {
-        const response = await axios.post('utils/api.php', formData);
-        return response.data;
+        const response = await axios.post('utils/api.php', formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            }
+        });
+
+        if (response.data["esito"] === true) {
+            return { esito: true, IDpost: response.data["IDpost"] };
+        } else {
+            return { esito: false, errore: response.data["errore"] };
+        }
     } catch (error) {
-        return { esito: false, errore: error.message };
+        if (error.response) { // Response with a status code not in range 2xx
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+        } else if (error.request) { // No response
+            console.log(error.request);
+        } else { // Error in setting up the request
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+        return { esito: false, errore: "Error during the request. Please try again." };
     }
 }
