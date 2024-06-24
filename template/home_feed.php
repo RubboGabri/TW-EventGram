@@ -28,6 +28,12 @@
         <?php foreach ($templateParams["posts"] as $post): ?>
             <div class="col-md-4 mb-4">
                 <div class="card">
+                <div class="post-header" style = "padding : 20px;margin: 3px;">
+                <div class="d-flex align-items-center">
+                    <img src="img/profile.png" alt="Profile" class="img-fluid" style="max-height: 20px; margin-right: 5px;"/>
+                    <span style="font-weight: bold;"><?php echo htmlspecialchars($post['username']); ?></span>
+                </div>
+                    </div>
                     <?php if ($post['img']): ?>
                         <img src="data:image/jpeg;base64,<?php echo base64_encode($post['img']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($post['title']); ?>">
                     <?php endif; ?>
