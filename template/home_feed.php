@@ -37,12 +37,15 @@
                     <?php if ($post['img']): ?>
                         <img src="data:image/jpeg;base64,<?php echo base64_encode($post['img']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($post['title']); ?>">
                     <?php endif; ?>
-                    <div class="card-body">
-                        <h5 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h5>
-                        <h6 class="card-subtitle mb-2 text-muted"><?php echo htmlspecialchars($post['location']); ?></h6>
-                        <p class="card-text"><?php echo htmlspecialchars($post['description']); ?></p>
-                        <p class="card-text"><small class="text-muted"><?php echo htmlspecialchars($post['eventDate']); ?></small></p>
-                        <p class="card-text">Luogo: <?php echo htmlspecialchars($post['location']); ?></p>
+                    <div class="card-body" style="padding: 20px;">
+                        <h5 class="card-title" style="margin-bottom: 30px;font-size : 30px"> <!-- Aumenta questo valore per più spazio -->
+                            <?php echo htmlspecialchars($post['title']); ?>
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted" style="margin-top: 30px;"> <!-- Aumenta questo valore per più spazio -->
+                            Luogo: <?php echo htmlspecialchars($post['location']); ?>
+                        </h6>
+                        <p class="card-text" style = "margin-top : 20px;font-weight:bold;"><?php echo htmlspecialchars($post['description']); ?></p>
+                        <p class="card-text"><small class="text-muted">Data Evento : <?php echo date('Y-m-d H:i', strtotime($post['eventDate'])); ?></small></p>
                         <p class="card-text">Categoria: <?php echo htmlspecialchars($post['category']); ?></p>
                         <p class="card-text">Prezzo: <?php echo htmlspecialchars($post['price']); ?>€</p>
                         <p class="card-text">Età minima: <?php echo htmlspecialchars($post['minAge']); ?> anni</p>

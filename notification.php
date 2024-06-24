@@ -40,7 +40,7 @@ foreach ($notifications as &$notification) {
     }
 }
 
-var_dump($updatedNotifications); // Debugging
+//var_dump($updatedNotifications); // Debugging
 
 $templateParams["title"] = "Notifiche - EventGram";
 $templateParams["notifications"] = [
