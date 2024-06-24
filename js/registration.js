@@ -12,10 +12,10 @@ document.querySelector("main form").addEventListener("submit", async function (e
 
 async function register(username, password, confirmPassword) {
     if (username === '' || password === '') {
-        return { esito: false, errore: "Error! You must choose a Username and Password!" };
+        return { esito: false, errore: "Errore! Devi scegliere un'username e una password!" };
     }
     if (password !== confirmPassword) {
-        return { esito: false, errore: "Error! The passwords do not match!" };
+        return { esito: false, errore: "Errore! Le password non corrispondono!" };
     }
     const formData = new FormData();
     formData.append('op', "register");
@@ -31,7 +31,7 @@ async function register(username, password, confirmPassword) {
             return response.data;
         }
     } catch (error) {
-        console.error('Registration error:', error);
-        return { esito: false, errore: "Error during the request. Please try again." };
+        console.error('Errore di registrazione:', error);
+        return { esito: false, errore: "Errore durante la richiesta. Riprovare." };
     }
 }

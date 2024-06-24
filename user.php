@@ -10,7 +10,7 @@ if (isset($_GET["id"])) {
     $templateParams["user"] = $_SESSION["idUser"];
 }
 
-$templateParams["header"] = "header_profile.php";
+$templateParams["header"] = "header.php";
 
 $userData = $dbh->getUserById($templateParams["user"]);
 $userPosts = $dbh->getUserPosts($templateParams["user"]);

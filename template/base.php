@@ -30,7 +30,7 @@
 </head>
 <?php
     if(isset($templateParams["header"])){
-        $header_offset = "mt-5 mt-md-0";
+        $header_offset = "py-5 py-md-0";
     }
 ?>
 <body class="gradient-background">
@@ -45,7 +45,7 @@
             $offset = "offset-md-1 offset-lg-3";
         }
     ?>
-    <main class="<?php if(isset($offset)) echo $offset ?> <?php if(isset($header_offset)) echo $header_offset ?>">
+    <main class="<?php if(isset($offset)) echo $offset ?>">
     <?php
         if(isset($templateParams["main"])){
             require($templateParams["main"]);

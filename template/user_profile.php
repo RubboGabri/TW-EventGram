@@ -1,4 +1,4 @@
-<div class="container min-vh-100 d-flex flex-column ps-4">
+<div class="container min-vh-100 d-flex flex-column ps-4 <?php if(isset($header_offset)) echo $header_offset ?>">
     <span class="d-none d-md-block fs-4 fw-bold pt-3 text-center"> 
         <?php echo $user["username"] ?> 
     </span>
@@ -9,7 +9,7 @@
                                 $imageSrc = 'data:image/jpeg;base64,' . $base64Image;
                                 echo $imageSrc;
                             } else echo 'img/profile.png'; ?>" 
-                        alt="Profile Picture" class="img-fluid" style="max-height: 100px">
+                        alt="Profile Picture" class="img-fluid" style="max-height: 200px">
         </picture>
         <div class="col-8 d-flex align-items-center pe-0">
             <div class="row text-center w-100">
@@ -80,7 +80,7 @@
                 <?php foreach ($userPosts as $post): ?>
                     <div class="col-4 mb-4">
                         <a href="post.php?id=<?php echo $post['IDpost']; ?>">
-                            <img src="<?php echo $post['post_image']; ?>" alt="Post Image" class="img-fluid">
+                            <img src="<?php echo $post['img']; ?>" alt="Post Image" class="img-fluid">
                         </a>
                     </div>
                 <?php endforeach; ?>

@@ -106,6 +106,14 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getUserByUsername($username){
+        $stmt = $this->prepare("SELECT * FROM Utenti WHERE username=?");
+        $stmt->bind_param('s',$username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getUserStats($IDuser){
         $query = "SELECT P.numPost, FR.numFollower, FD.numFollowed FROM (SELECT COUNT(IDpost) AS numPost FROM Post WHERE IDuser=?) AS P,
                     (SELECT COUNT(IDfollower) AS numFollower FROM Follower WHERE IDfollowed=?) AS FR,
@@ -197,8 +205,12 @@ class DatabaseHelper {
         return $stmt->insert_id;
     }
 
-    public function updateUser($IDuser, $username, $info, $profilePic = null){
-        if ($profilePic === null) {
+    public function updateUser($IDuser, $username, $info, $profilePic = null) {
+        if ($profilePic === 'REMOVE') {
+            $query = "UPDATE Utenti SET username=?, info=?, profilePic=NULL WHERE IDuser=?";
+            $stmt = $this->prepare($query);
+            $stmt->bind_param('ssi', $username, $info, $IDuser);
+        } elseif ($profilePic === null) {
             $query = "UPDATE Utenti SET username=?, info=? WHERE IDuser=?";
             $stmt = $this->prepare($query);
             $stmt->bind_param('ssi', $username, $info, $IDuser);
@@ -207,9 +219,16 @@ class DatabaseHelper {
             $stmt = $this->prepare($query);
             $stmt->bind_param('sssi', $username, $info, $profilePic, $IDuser);
         }
-    
         return $stmt->execute();
+
     }
+
+    public function deleteUser($IDuser) {
+        $query = "DELETE FROM Utenti WHERE IDuser=?";
+        $stmt = $this->prepare($query);
+        $stmt->bind_param('i', $IDuser);
+        return $stmt->execute();
+    }      
     
 }
 ?>

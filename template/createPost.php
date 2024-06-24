@@ -1,5 +1,5 @@
-<div class="container min-vh-100 d-flex flex-column ps-4">
-    <h1 class="text-center mb-4">Crea un nuovo Post</h1>
+<div class="container min-vh-100 d-flex flex-column <?php if(isset($header_offset)) echo $header_offset ?>">
+    <h1 class="text-center pt-4">Crea un nuovo Post</h1>
     <form action="#" method="post" enctype="multipart/form-data" class="w-75 mx-auto">
         <p class="text-danger"></p>
         <div class="form-group">
@@ -44,6 +44,6 @@
             <label for="img">Immagine:</label>
             <input type="file" accept=".jpg,.jpeg,.png" class="form-control" id="img" name="img">
         </div>
-        <button type="submit" class="btn btn-primary mt-4 w-100">Crea Post</button>
+        <button type="submit" class="btn btn-primary my-4 w-100">Crea Post</button>
     </form>
 </div>
