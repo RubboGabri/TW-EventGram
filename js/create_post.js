@@ -39,7 +39,7 @@ async function createPost(title, description, eventDate, location, category, pri
         formData.append('minAge', minAge);
     }
 
-    if (imgFile !== null) {
+    if (imgFile) {
         formData.append('imgFile', imgFile); // Append the binary file directly
     }
 

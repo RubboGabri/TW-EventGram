@@ -15,7 +15,7 @@ async function register(username, password, confirmPassword) {
         return { esito: false, errore: "Errore! Devi scegliere un'username e una password!" };
     }
     if (password !== confirmPassword) {
-        return { esito: false, errore: "Errore! Le password non corrispondono!" };
+        return { esito: false, errore: "Error! The passwords do not match!" };
     }
     const formData = new FormData();
     formData.append('op', "register");

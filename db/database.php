@@ -154,18 +154,28 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getAllPosts(){
-        $query = "SELECT P.IDpost, P.title, P.description, P.eventDate, P.img, U.username, L.name AS location, C.name AS category
-                FROM Post P
-                JOIN Utenti U ON P.IDuser = U.IDuser
-                JOIN Locations L ON P.IDlocation = L.IDlocation
-                JOIN Categorie C ON P.IDcategoria = C.IDcategory
-                ORDER BY P.postDate DESC";
+    public function getAllPosts() {
+        $query = "
+            SELECT 
+                P.* 
+                L.name AS location, 
+                C.name AS category, 
+                U.username,
+                (SELECT COUNT(*) FROM Likes WHERE Likes.IDpost = P.IDpost) AS numLikes,
+                (SELECT COUNT(*) FROM Commenti WHERE Commenti.IDpost = P.IDpost) AS numComments
+            FROM Post P 
+            JOIN Locations L ON P.IDlocation = L.IDlocation 
+            JOIN Categorie C ON P.IDcategoria = C.IDcategory 
+            JOIN Utenti U ON P.IDuser = U.IDuser
+            ORDER BY P.postDate DESC";
         $stmt = $this->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+    
+    
+    
 
     public function createPost($imgFile, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge){
         $query = "INSERT INTO Post (img, title, description, eventDate, IDuser, IDlocation, price, IDcategoria, minAge) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
