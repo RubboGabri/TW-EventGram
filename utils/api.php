@@ -89,10 +89,13 @@ switch ($_REQUEST['op']) {
         echo json_encode($groupedNotifications);
         break;
 
-        case 'createPost':
+    case 'createPost':
+        if (isset($_POST["op"]) && $_POST["op"] == "createPost" && isset($_POST["title"])
+                && isset($_POST["description"]) && isset($_POST["eventDate"]) && isset($_POST["location"])
+                && isset($_POST["category"]) && isset($_POST["price"])) {
             $result["esito"] = false;
             $result["errore"] = "";
-        
+ 
             // Ottieni i dati dal modulo
             $title = $_POST['title'];
             $description = $_POST['description'];
@@ -102,6 +105,7 @@ switch ($_REQUEST['op']) {
             $price = $_POST['price'];
             $minAge = isset($_POST['minAge']) ? $_POST['minAge'] : null;
         
+            // Gestione del caricamento dell'immagine
             $imgData = null;
             if (isset($_FILES['imgFile']) && $_FILES['imgFile']['error'] === UPLOAD_ERR_OK) {
                 $imgTmpPath = $_FILES['imgFile']['tmp_name'];
@@ -109,10 +113,18 @@ switch ($_REQUEST['op']) {
         
                 // Aggiungi log per verificare i dati dell'immagine
                 error_log("Lunghezza dati immagine: " . strlen($imgData));
-                error_log("Dati immagine: " . bin2hex(substr($imgData, 0, 32))); // Log dei primi 32 byte dell'immagine in formato esadecimale
             } else {
-                error_log("Errore durante il caricamento dell'immagine: " . (isset($_FILES['imgFile']['error']) ? $_FILES['imgFile']['error'] : 'File non caricato'));
+                error_log("Errore durante il caricamento dell'immagine: " . $_FILES['imgFile']['error']);
             }
+        
+            // Log dei parametri per il debug
+            error_log("Title: " . $title);
+            error_log("Description: " . $description);
+            error_log("Event Date: " . $eventDate);
+            error_log("Location: " . $location);
+            error_log("Category: " . $category);
+            error_log("Price: " . $price);
+            error_log("Min Age: " . $minAge);
         
             $dbh->db->query('SET FOREIGN_KEY_CHECKS=0');
         
@@ -126,12 +138,12 @@ switch ($_REQUEST['op']) {
             } else {
                 $result["errore"] = "Errore nella creazione del post.";
             }
+        
             header('Content-Type: application/json');
             echo json_encode($result);
-            break;        
+        }
+        break;        
         
-        
-
     case 'follow':
         if (isset($_SESSION['idUser']) && isset($_POST["idFollowed"])) {
             $dbh->insertFollower($loggedUser, $_POST["idFollowed"]);
