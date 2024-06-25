@@ -1,0 +1,193 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #98de81;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar-logo {
+    width: 80%;
+    max-width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.sidebar nav ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+
+.sidebar nav ul li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.sidebar nav ul li img {
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.sidebar nav ul li span {
+    font-weight: bold;
+    flex-grow: 1;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.event {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.event-profile {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.profile-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.event-header h2, .event-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.event-image {
+    background-color: #ddd;
+    height: 150px;
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    flex: 1;
+}
+
+.event-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.event-stats {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.event-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.date, .likes, .comments {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.like-icon, .comments-icon {
+    width: 16px;
+    height: auto;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+        padding: 10px;
+    }
+
+    .sidebar-logo {
+        width: 100%;
+        max-width: 120px;
+    }
+
+    .sidebar nav ul li {
+        justify-content: center;
+    }
+
+    .sidebar nav ul li span {
+        font-size: 16px;
+    }
+
+    .event-header h2, .event-header h3 {
+        font-size: 16px;
+    }
+
+    .event-image {
+        height: 100px;
+    }
+
+    .date, .likes, .comments {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 150px;
+        padding: 5px;
+    }
+
+    .sidebar-logo {
+        width: 100%;
+        max-width: 100px;
+    }
+
+    .sidebar nav ul li {
+        justify-content: center;
+    }
+
+    .sidebar nav ul li span {
+        font-size: 14px;
+    }
+
+    .event-header h2, .event-header h3 {
+        font-size: 14px;
+    }
+
+    .event-image {
+        height: 80px;
+    }
+
+    .date, .likes, .comments {
+        font-size: 10px;
+    }
+}
