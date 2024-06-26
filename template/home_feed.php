@@ -1,37 +1,16 @@
-<style>
-    .card {
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-title {
-        font-size: 1.5rem;
-    }
-
-    .card-subtitle {
-        font-size: 1.25rem;
-    }
-
-    .card-text {
-        font-size: 1.25rem;
-    }
-
-    .card-footer {
-        font-size: 1.25rem;
-    }
-    .card-link { 
-        text-decoration: none;
-    }
-</style>
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="row">
+<div class="container d-flex justify-content-center align-items-center min-vh-100 <?php if(isset($header_offset)) echo $header_offset ?>">
+    <div class="row pt-5">
         <?php foreach ($templateParams["posts"] as $post): ?>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 pb-5">
                 <div class="card">
                 <div class="post-header" style = "padding : 20px;margin: 3px;">
                 <div class="d-flex align-items-center">
-                    <img src="img/profile.png" alt="Profile" class="img-fluid" style="max-height: 20px; margin-right: 5px;"/>
-                    <span style="font-weight: bold;"><?php echo htmlspecialchars($post['username']); ?></span>
+                    <a href="user.php?id=<?php echo urlencode($post["IDuser"]); ?>" class="fw-bold text-decoration-none text-dark">
+                        <img src="img/profile.png" alt="Profile" class="img-fluid" style="max-height: 20px; margin-right: 5px;"/>
+                        <span>
+                            <?php echo htmlspecialchars($post['username']); ?>
+                        </span>
+                    </a>
                 </div>
                     </div>
                     <?php if ($post['img']): ?>
@@ -51,16 +30,16 @@
                         <p class="card-text">Età minima: <?php echo htmlspecialchars($post['minAge']); ?> anni</p>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <div>
-                            <a href="#" class="card-link">
+                        <div class="d-flex align-items-center">
+                            <a href="#" class="card-link d-flex align-items-center">
                                 <img src="img/like_outlined.png" alt="Like" class="img-fluid" style="max-height: 20px"/>
-                                <span><?php echo htmlspecialchars($post['numLikes']); ?></span>
+                                <span class="ms-1"><?php echo htmlspecialchars($post['numLikes']); ?></span>
                             </a>
                         </div>
-                        <div>
-                            <a href="#" class="card-link">
+                        <div class="d-flex align-items-center">
+                            <a href="#" class="card-link d-flex align-items-center">
                                 <img src="img/comment.png" alt="Comment" class="img-fluid" style="max-height: 20px"/>
-                                <span><?php echo htmlspecialchars($post['numComments']); ?></span>
+                                <span class="ms-1"><?php echo htmlspecialchars($post['numComments']); ?></span>
                             </a>
                         </div>
                     </div>

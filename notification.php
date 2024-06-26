@@ -50,5 +50,7 @@ $templateParams["notifications"] = [
     "earlier" => $earlier
 ];
 
+$templateParams["header"] = "template/header.php";
+
 require_once("template/base.php");
 ?>

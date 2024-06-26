@@ -8,25 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="shortcut icon" type="image/png" href="img/AppIcon.png">
     <link href="css/custom_background.css" rel="stylesheet">
-    <style>
-        .navbar-item a {
-            position: relative;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .navbar-item a .mask {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background-color: hsla(0, 0%, 98%, 0.2);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .navbar-item a:hover .mask {
-            opacity: 1;
-        }
-    </style>
+
 </head>
 <?php
     if(isset($templateParams["header"])){

@@ -110,28 +110,10 @@ switch ($_REQUEST['op']) {
             if (isset($_FILES['imgFile']) && $_FILES['imgFile']['error'] === UPLOAD_ERR_OK) {
                 $imgTmpPath = $_FILES['imgFile']['tmp_name'];
                 $imgData = file_get_contents($imgTmpPath); // Ottieni il contenuto dell'immagine
-        
-                // Aggiungi log per verificare i dati dell'immagine
-                error_log("Lunghezza dati immagine: " . strlen($imgData));
-            } else {
-                error_log("Errore durante il caricamento dell'immagine: " . $_FILES['imgFile']['error']);
             }
-        
-            // Log dei parametri per il debug
-            error_log("Title: " . $title);
-            error_log("Description: " . $description);
-            error_log("Event Date: " . $eventDate);
-            error_log("Location: " . $location);
-            error_log("Category: " . $category);
-            error_log("Price: " . $price);
-            error_log("Min Age: " . $minAge);
-        
-            $dbh->db->query('SET FOREIGN_KEY_CHECKS=0');
-        
+            
             // Chiama la funzione per creare il post
             $postCreated = $dbh->createPost($imgData, $title, $description, $eventDate, $loggedUser, $location, $price, $category, $minAge);
-        
-            $dbh->db->query('SET FOREIGN_KEY_CHECKS=1');
         
             if ($postCreated) {
                 $result["esito"] = true;
@@ -150,7 +132,7 @@ switch ($_REQUEST['op']) {
             $result["esito"] = true;
             $result["errore"] = "Nessuno";
         
-            $dbh->notifyFollow($loggedUser, $_POST["idFollowed"]);
+            //$dbh->notifyFollow($loggedUser, $_POST["idFollowed"]);
         
             header('Content-Type: application/json');
             echo json_encode($result);

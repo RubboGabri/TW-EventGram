@@ -4,13 +4,13 @@ $title = $templateParams['title'];
 $firstWord = strtok($title, ' ');
 ?>
 
-<header class="d-md-none fixed-top bg-info d-flex justify-content-between align-items-center overflow-hidden" style="height: 7vh;">
+<header class="d-md-none fixed-top border-bottom border-dark bg-info d-flex justify-content-between align-items-center" style="height: 7vh;">
 
     <?php
     switch ($firstWord) {
         case 'EventGram':
             echo '<span class="position-absolute top-50 start-50 translate-middle d-flex align-items-center fs-4 fw-bold">Home</span>';
-            echo '<a href="notification.php" class="ms-auto d-flex align-items-center m-2 p-3"> <img src="img/notification.png" alt="Notifiche" class="img-fluid" style="max-height: 30px"/> </a>';
+            echo '<a href="notification.php" class="ms-auto d-flex align-items-center m-2 p-3"> <img src="img/notification.png" alt="Notifiche" class="img-fluid" style="max-height: 28px"/> </a>';
             break;
 
         case 'Modifica':
@@ -21,6 +21,10 @@ $firstWord = strtok($title, ' ');
         case 'Notifiche':
             echo '<a href="home.php" class="d-flex align-items-center m-2 p-1"> <img src="img/back.png" alt="Back" class="img-fluid" style="max-height: 30px"/> </a>';
             echo '<span class="position-absolute top-50 start-50 translate-middle d-flex align-items-center fs-4 fw-bold">Notifiche</span>';
+            break;
+
+        case 'Crea':
+            echo '<span class="position-absolute top-50 start-50 translate-middle d-flex align-items-center fs-4 fw-bold">Nuovo post</span>';
             break;
 
         default:

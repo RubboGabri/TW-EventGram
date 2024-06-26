@@ -13,11 +13,13 @@ if (isset($_GET["id"])) {
 $templateParams["header"] = "header.php";
 
 $userData = $dbh->getUserById($templateParams["user"]);
-$userPosts = $dbh->getUserPosts($templateParams["user"]);
 $userStatistics = $dbh->getUserStats($templateParams["user"]);
 
 $user = $userData[0];
 $userStats = $userStatistics[0];
+
+$userPosts = $dbh->getUserPosts($templateParams["user"]);
+$userSubcriptions = $dbh->getUserSubscriptions($templateParams["user"]);
 
 $templateParams["title"] = $user["username"] . " - EventGram";
 

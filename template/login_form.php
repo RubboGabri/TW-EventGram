@@ -18,7 +18,7 @@
                 <input type="password" id="password" name="password" placeholder="Password" class="form-control" required>
             </div>
             <div class="form-group mb-3">
-                <input type="submit" name="submit" value="Login" class="btn btn-custom w-100">
+                <input type="submit" name="submit" value="Login" class="btn btn-custom">
             </div>
         </form>
         <section class="mt-5">

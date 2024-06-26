@@ -1,6 +1,6 @@
 <div class="container min-vh-100 d-flex flex-column <?php if(isset($header_offset)) echo $header_offset ?>">
-    <h1 class="text-center pt-4">Crea un nuovo Post</h1>
-    <form action="#" method="post" enctype="multipart/form-data" class="w-75 mx-auto">
+    <h1 class="d-none d-md-block text-center pt-4">Crea un nuovo Post</h1>
+    <form action="#" method="post" enctype="multipart/form-data" class="w-75 mx-auto mt-3">
         <p class="text-danger"></p>
         <div class="form-group">
             <label for="title">Titolo:</label>
@@ -8,7 +8,7 @@
         </div>
         <div class="form-group mt-3">
             <label for="description">Descrizione:</label>
-            <textarea class="form-control" id="description" name="description" rows="1" required></textarea>
+            <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
         </div>
         <div class="form-group mt-3">
             <label for="eventDate">Data dell'evento:</label>
@@ -44,6 +44,6 @@
             <label for="img">Immagine:</label>
             <input type="file" accept=".jpg,.jpeg,.png" class="form-control" id="img" name="img">
         </div>
-        <button type="submit" class="btn btn-primary my-4 w-100">Crea Post</button>
+        <button type="submit" class="btn btn-primary my-4 w-100" style="border-radius: 25px">Crea Post</button>
     </form>
 </div>

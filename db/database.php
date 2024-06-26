@@ -18,23 +18,6 @@ class DatabaseHelper {
         return $stmt;
     }
 
-    public function getUserPosts($idUser, $n=-1){
-        $query = "SELECT P.IDpost FROM Post P, infopost I WHERE P.IDpost=I.IDpost AND P.IDuser=? ORDER BY postDate DESC";
-        if($n > 0){
-            $query .= " LIMIT ?";
-        }
-        $stmt = $this->prepare($query);
-        if($n > 0){
-            $stmt->bind_param('ii',$idUser, $n);
-        }
-        else {
-            $stmt->bind_param('i',$idUser);
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
     public function insertUser($username, $password){
         $stmt = $this->prepare("INSERT INTO Utenti (username, password, salt) VALUES (?, ?, ?)");
         $random_salt = hash('sha512', uniqid(mt_rand(1, mt_getrandmax()), true));
@@ -175,6 +158,37 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getUserPosts($idUser) {
+        $query = "
+            SELECT 
+                P.*, 
+                L.name AS location, 
+                C.name AS category, 
+                U.username, 
+                I.numLikes, 
+                I.numComments
+            FROM Post P
+            JOIN Locations L ON P.IDlocation = L.IDlocation 
+            JOIN Categorie C ON P.IDcategoria = C.IDcategory 
+            JOIN Utenti U ON P.IDuser = U.IDuser
+            LEFT JOIN Infopost I ON P.IDpost = I.IDpost
+            WHERE P.IDuser = ?
+            ORDER BY P.postDate DESC";
+        $stmt = $this->prepare($query);
+        $stmt->bind_param('i', $idUser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getPostById($idPost) {
+        $stmt = $this->prepare("SELECT * FROM Post WHERE IDpost=?");
+        $stmt->bind_param('i',$idPost);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function createPost($imgFile, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge){
         $query = "INSERT INTO Post (img, title, description, eventDate, IDuser, IDlocation, price, IDcategoria, minAge) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->prepare($query);
@@ -236,7 +250,30 @@ class DatabaseHelper {
         $stmt = $this->prepare($query);
         $stmt->bind_param('i', $IDuser);
         return $stmt->execute();
-    }      
-    
+    }
+
+    public function getUserSubscriptions($idUser) {
+        $query = "
+                    SELECT 
+                        P.*, 
+                        L.name AS location, 
+                        C.name AS category, 
+                        U.username, 
+                        I.numLikes, 
+                        I.numComments
+                    FROM Iscrizioni S
+                    JOIN Post P ON S.IDpost = P.IDpost
+                    JOIN Locations L ON P.IDlocation = L.IDlocation
+                    JOIN Categorie C ON P.IDcategoria = C.IDcategory
+                    JOIN Utenti U ON P.IDuser = U.IDuser
+                    LEFT JOIN Infopost I ON P.IDpost = I.IDpost
+                    WHERE S.IDuser = ?
+                    ORDER BY P.postDate DESC";
+        $stmt = $this->prepare($query);
+        $stmt->bind_param('i', $idUser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }  
 }
 ?>
