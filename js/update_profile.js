@@ -1,69 +1,179 @@
-async function updateProfile(username, info, picElem) {
-    if (!username) {
-        return -1;
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    const changePictureButton = document.getElementById('change-picture-button');
+    const removePictureButton = document.getElementById('remove-picture-button');
+    const profilePicture = document.getElementById('profile-picture');
+    const imgInput = document.getElementById('img');
+    const removeImageFlag = document.getElementById('remove-image-flag');
+    const resizedImageInput = document.getElementById('resizedImage');
+    const deleteAccountButton = document.querySelector('[aria-label="Elimina account"]');
 
-    const formData = new FormData();
-    formData.append('op', "updateUser");
-    formData.append('username', username);
-    formData.append('info', info);
+    const defaultPicture = 'img/profile.png';
 
-    try {
-        let headers = {};
-        if (picElem.files.length > 0) { // Update user including profile image
-            const pic = picElem.files[0];
-            const base64 = await readAsDataURL(pic);
-            const resizedImage = await resizeBase64(base64);
-            formData.append('pic', resizedImage);
-            headers["Content-Type"] = "multipart/form-data";
+    changePictureButton.addEventListener('click', function() {
+        imgInput.click();
+    });
+
+    imgInput.addEventListener('change', function() {
+        const file = imgInput.files[0];
+        if (file) {
+            removeImageFlag.value = '0'; // Reset the flag if a new image is selected
+            resizeImage(file, 200, 200, function(resizedDataUrl) {
+                profilePicture.src = resizedDataUrl;
+                resizedImageInput.value = resizedDataUrl; // Store the resized image data URL in hidden input
+            });
         }
+    });
 
-        const response = await axios.post('utils/api.php', formData, { headers });
+    removePictureButton.addEventListener('click', function() {
+        profilePicture.src = defaultPicture;
+        imgInput.value = '';
+        removeImageFlag.value = '1'; // Set the flag to indicate the image should be removed
+        resizedImageInput.value = ''; // Clear the hidden input
+    });
 
-        if (response.data["esito"] === true) {
-            location.href = "user.php";
-            return 0;
+    document.getElementById('profile-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.innerText = '';
+
+        const username = document.getElementById('username').value.trim();
+        const info = document.getElementById('info').value;
+        const picElem = document.getElementById('img');
+
+        const result = await updateProfile(username, info, picElem);
+        if (result === 0) {
+            console.log('Profilo aggiornato con successo');
+            location.href = 'user.php'; // Redirect to user profile page
         } else {
-            return -2;
+            errorMessage.innerText = result.errore;
         }
-    } catch (error) {
-        console.error(error);
-        return -2;
+    });
+
+    async function updateProfile(username, info, picElem) {
+        const formData = new FormData();
+        formData.append('op', "updateProfile");
+        formData.append('username', username);
+        formData.append('info', info);
+
+        if (removeImageFlag.value === '1') {
+            formData.append('removeImage', '1');
+        } else if (resizedImageInput.value) {
+            // Convert data URL to Blob
+            const blob = dataURLToBlob(resizedImageInput.value);
+            formData.append('pic', blob, 'profile.png');
+        }
+
+        try {
+            const response = await axios.post('utils/api.php', formData, { headers: { "Content-Type": "multipart/form-data" } });
+
+            if (response.data["esito"] === true) {
+                return 0;
+            } else {
+                return response.data;
+            }
+        } catch (error) {
+            console.error(error);
+            return { esito: false, errore: "Errore durante l'aggiornamento del profilo." };
+        }
     }
-}
 
-function readAsDataURL(file) {
-    return new Promise((resolve, reject) => {
+    deleteAccountButton.addEventListener('click', async function() {
+        if (confirm('Sei sicuro di voler eliminare il tuo account?')) {
+            const result = await deleteAccount();
+            if (result === 0) {
+                console.log('Account eliminato con successo');
+                location.href = 'index.php'; // Redirect to home page after account deletion
+            } else {
+                document.getElementById('error-message').innerText = result.errore;
+            }
+        }
+    });
+
+    async function deleteAccount() {
+        const formData = new FormData();
+        formData.append('op', "deleteAccount");
+
+        try {
+            const response = await axios.post('utils/api.php', formData);
+            
+            if (response.data["esito"] === true) {
+                return 0;
+            } else {
+                return response.data;
+            }
+        } catch (error) {
+            console.error(error);
+            return { esito: false, errore: "Errore durante l'eliminazione dell'account." };
+        }
+    }
+
+    function resizeImage(file, width, height, callback) {
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
-}
-
-function resizeBase64(base64, maxWidth = 256, maxHeight = 256) {
-    return new Promise(resolve => {
-        const img = new Image();
-        img.onload = () => {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            const canvasCopy = document.createElement("canvas");
-            const copyContext = canvasCopy.getContext("2d");
-
-            let ratio = 1;
-            if (img.width > maxWidth) ratio = maxWidth / img.width;
-            else if (img.height > maxHeight) ratio = maxHeight / img.height;
-
-            canvasCopy.width = img.width;
-            canvasCopy.height = img.height;
-            copyContext.drawImage(img, 0, 0);
-
-            canvas.width = img.width * ratio;
-            canvas.height = img.height * ratio;
-            ctx.drawImage(canvasCopy, 0, 0, canvasCopy.width, canvasCopy.height, 0, 0, canvas.width, canvas.height);
-
-            resolve(canvas.toDataURL().split(',')[1]);
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+                const scaleFactor = 2; // Increase this factor to improve quality
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+    
+                // Set the canvas size to the scaled dimensions
+                canvas.width = width * scaleFactor;
+                canvas.height = height * scaleFactor;
+    
+                // Clear the canvas to make it transparent
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+                // Calculate the dimensions to maintain aspect ratio and cover the entire circle
+                const aspectRatio = img.width / img.height;
+                let newWidth, newHeight, offsetX, offsetY;
+    
+                if (aspectRatio > 1) {
+                    newHeight = canvas.height;
+                    newWidth = canvas.height * aspectRatio;
+                    offsetX = (canvas.width - newWidth) / 2;
+                    offsetY = 0;
+                } else {
+                    newWidth = canvas.width;
+                    newHeight = canvas.width / aspectRatio;
+                    offsetX = 0;
+                    offsetY = (canvas.height - newHeight) / 2;
+                }
+    
+                // Draw circular clipping path
+                ctx.beginPath();
+                ctx.arc(canvas.width / 2, canvas.height / 2, Math.min(canvas.width, canvas.height) / 2, 0, Math.PI * 2, true);
+                ctx.closePath();
+                ctx.clip();
+    
+                // Draw the image into the circle
+                ctx.drawImage(img, offsetX, offsetY, newWidth, newHeight);
+    
+                // Scale down the canvas to the original size
+                const outputCanvas = document.createElement('canvas');
+                outputCanvas.width = width;
+                outputCanvas.height = height;
+                const outputCtx = outputCanvas.getContext('2d');
+                outputCtx.drawImage(canvas, 0, 0, width, height);
+    
+                const dataUrl = outputCanvas.toDataURL('image/png'); // Use PNG to preserve transparency
+                callback(dataUrl);
+            };
+            img.src = event.target.result;
         };
-        img.src = 'data:image/png;base64,' + base64;
-    });
-}
+        reader.readAsDataURL(file);
+    }
+    
+    
+    
+    
+    function dataURLToBlob(dataURL) {
+        const binaryString = atob(dataURL.split(',')[1]);
+        const arrayBuffer = new ArrayBuffer(binaryString.length);
+        const intArray = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < binaryString.length; i++) {
+            intArray[i] = binaryString.charCodeAt(i);
+        }
+        return new Blob([intArray], { type: 'image/png' });
+    }
+});

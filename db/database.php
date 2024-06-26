@@ -18,23 +18,6 @@ class DatabaseHelper {
         return $stmt;
     }
 
-    public function getUserPosts($idUser, $n=-1){
-        $query = "SELECT P.IDpost FROM Post P, infopost I WHERE P.IDpost=I.IDpost AND P.IDuser=? ORDER BY postDate DESC";
-        if($n > 0){
-            $query .= " LIMIT ?";
-        }
-        $stmt = $this->prepare($query);
-        if($n > 0){
-            $stmt->bind_param('ii',$idUser, $n);
-        }
-        else {
-            $stmt->bind_param('i',$idUser);
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
     public function insertUser($username, $password){
         $stmt = $this->prepare("INSERT INTO Utenti (username, password, salt) VALUES (?, ?, ?)");
         $random_salt = hash('sha512', uniqid(mt_rand(1, mt_getrandmax()), true));
@@ -106,6 +89,14 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getUserByUsername($username){
+        $stmt = $this->prepare("SELECT * FROM Utenti WHERE username=?");
+        $stmt->bind_param('s',$username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getUserStats($IDuser){
         $query = "SELECT P.numPost, FR.numFollower, FD.numFollowed FROM (SELECT COUNT(IDpost) AS numPost FROM Post WHERE IDuser=?) AS P,
                     (SELECT COUNT(IDfollower) AS numFollower FROM Follower WHERE IDfollowed=?) AS FR,
@@ -146,14 +137,48 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getAllPosts(){
-        $query = "SELECT P.IDpost, P.title, P.description, P.eventDate, P.img, U.username, L.name AS location, C.name AS category
-                FROM Post P
-                JOIN Utenti U ON P.IDuser = U.IDuser
-                JOIN Locations L ON P.IDlocation = L.IDlocation
-                JOIN Categorie C ON P.IDcategoria = C.IDcategory
-                ORDER BY P.postDate DESC";
+    public function getAllPosts() {
+        $query = "SELECT P.IDpost, P.img, P.title, P.description, P.eventDate, P.IDuser, P.IDlocation, P.price, P.IDcategoria, P.minAge, L.name AS location, C.name AS category, U.username, U.profilePic,
+                         (SELECT COUNT(*) FROM Likes WHERE Likes.IDpost = P.IDpost) AS numLikes,
+                         (SELECT COUNT(*) FROM Commenti WHERE Commenti.IDpost = P.IDpost) AS numComments
+                  FROM Post P 
+                  JOIN Locations L ON P.IDlocation = L.IDlocation 
+                  JOIN Categorie C ON P.IDcategoria = C.IDcategory 
+                  JOIN Utenti U ON P.IDuser = U.IDuser
+                  ORDER BY P.postDate DESC";
         $stmt = $this->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    
+
+    public function getUserPosts($idUser) {
+        $query = "
+            SELECT 
+                P.*, 
+                L.name AS location, 
+                C.name AS category, 
+                U.username, 
+                I.numLikes, 
+                I.numComments
+            FROM Post P
+            JOIN Locations L ON P.IDlocation = L.IDlocation 
+            JOIN Categorie C ON P.IDcategoria = C.IDcategory 
+            JOIN Utenti U ON P.IDuser = U.IDuser
+            LEFT JOIN Infopost I ON P.IDpost = I.IDpost
+            WHERE P.IDuser = ?
+            ORDER BY P.postDate DESC";
+        $stmt = $this->prepare($query);
+        $stmt->bind_param('i', $idUser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getPostById($idPost) {
+        $stmt = $this->prepare("SELECT * FROM Post WHERE IDpost=?");
+        $stmt->bind_param('i',$idPost);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
@@ -164,16 +189,16 @@ class DatabaseHelper {
         $stmt = $this->prepare($query);
         // Bind all parameters including the blob data
         $stmt->bind_param('bssssiisi', $imgFile, $title, $description, $eventDate, $IDuser, $IDlocation, $price, $category, $minAge);
-    
+   
         // Send the actual blob data for the first parameter
         $stmt->send_long_data(0, $imgFile);
-    
+   
         if ($stmt->execute()) {
             return true;
         } else {
             return false;
         }
-    }     
+    }  
 
     public function getAllCategories(){
         $query = "SELECT * FROM Categorie";
@@ -197,8 +222,12 @@ class DatabaseHelper {
         return $stmt->insert_id;
     }
 
-    public function updateUser($IDuser, $username, $info, $profilePic = null){
-        if ($profilePic === null) {
+    public function updateUser($IDuser, $username, $info, $profilePic = null) {
+        if ($profilePic === 'REMOVE') {
+            $query = "UPDATE Utenti SET username=?, info=?, profilePic=NULL WHERE IDuser=?";
+            $stmt = $this->prepare($query);
+            $stmt->bind_param('ssi', $username, $info, $IDuser);
+        } elseif ($profilePic === null) {
             $query = "UPDATE Utenti SET username=?, info=? WHERE IDuser=?";
             $stmt = $this->prepare($query);
             $stmt->bind_param('ssi', $username, $info, $IDuser);
@@ -207,9 +236,39 @@ class DatabaseHelper {
             $stmt = $this->prepare($query);
             $stmt->bind_param('sssi', $username, $info, $profilePic, $IDuser);
         }
-    
+        return $stmt->execute();
+
+    }
+
+    public function deleteUser($IDuser) {
+        $query = "DELETE FROM Utenti WHERE IDuser=?";
+        $stmt = $this->prepare($query);
+        $stmt->bind_param('i', $IDuser);
         return $stmt->execute();
     }
-    
+
+    public function getUserSubscriptions($idUser) {
+        $query = "
+                    SELECT 
+                        P.*, 
+                        L.name AS location, 
+                        C.name AS category, 
+                        U.username, 
+                        I.numLikes, 
+                        I.numComments
+                    FROM Iscrizioni S
+                    JOIN Post P ON S.IDpost = P.IDpost
+                    JOIN Locations L ON P.IDlocation = L.IDlocation
+                    JOIN Categorie C ON P.IDcategoria = C.IDcategory
+                    JOIN Utenti U ON P.IDuser = U.IDuser
+                    LEFT JOIN Infopost I ON P.IDpost = I.IDpost
+                    WHERE S.IDuser = ?
+                    ORDER BY P.postDate DESC";
+        $stmt = $this->prepare($query);
+        $stmt->bind_param('i', $idUser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }  
 }
 ?>

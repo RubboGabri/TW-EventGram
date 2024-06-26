@@ -3,7 +3,12 @@ require_once 'bootstrap.php';
 $templateParams["navbar"] = "template/navbar.html";
 $templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js", "js/update_profile.js");
 $templateParams["title"] = "Modifica profilo - EventGram";
-$templateParams["main"] = "template/login_form.php";
-$templateParams["header"] = "header_profile.php";
+$templateParams["user"] = $_SESSION["idUser"];
+
+$userData = $dbh->getUserById($templateParams["user"]);
+$user = $userData[0];
+
+$templateParams["main"] = "template/edit_profile_page.php";
+$templateParams["header"] = "header.php";
 require_once 'template/base.php';
 ?>

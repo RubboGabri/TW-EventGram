@@ -21,7 +21,7 @@ CREATE TABLE Utenti (
      username varchar(50) NOT NULL UNIQUE,
      password char(128) NOT NULL, 
      salt char(128) NOT NULL,
-     info text NOT NULL,
+     info text,
      profilePic mediumblob,
      creationDate datetime DEFAULT CURRENT_TIMESTAMP
      );
@@ -54,9 +54,9 @@ CREATE TABLE Post (
     price int NOT NULL,
     IDcategoria int NOT NULL,
     minAge int DEFAULT NULL,
-    FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser),
-    FOREIGN KEY (IDlocation) REFERENCES Locations(IDlocation),
-    FOREIGN KEY (IDcategoria) REFERENCES Categorie(IDcategory)
+    FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser) ON DELETE CASCADE,
+    FOREIGN KEY (IDlocation) REFERENCES Locations(IDlocation) ON DELETE CASCADE,
+    FOREIGN KEY (IDcategoria) REFERENCES Categorie(IDcategory) ON DELETE CASCADE
 );
 
 
@@ -69,7 +69,7 @@ CREATE TABLE Commenti (
      IDpost int NOT NULL,
      IDuser int NOT NULL,
      IDparent int DEFAULT NULL,
-     FOREIGN KEY (IDparent) REFERENCES Commenti(IDcomment)
+     FOREIGN KEY (IDparent) REFERENCES Commenti(IDcomment) ON DELETE CASCADE
      );
 
 -- Tables structure for table `Follower`
@@ -79,8 +79,8 @@ CREATE TABLE Follower (
      IDfollowed int NOT NULL,
      notification boolean DEFAULT TRUE,
      PRIMARY KEY (IDfollower, IDfollowed),
-     FOREIGN KEY (IDfollower) REFERENCES Utenti(IDuser),
-     FOREIGN KEY (IDfollowed) REFERENCES Utenti(IDuser)
+     FOREIGN KEY (IDfollower) REFERENCES Utenti(IDuser) ON DELETE CASCADE,
+     FOREIGN KEY (IDfollowed) REFERENCES Utenti(IDuser) ON DELETE CASCADE
      );
 
 -- Tables structure for table `Notifiche`
@@ -92,9 +92,9 @@ CREATE TABLE Notifiche (
      notifier int NOT NULL,  
      IDpost int,  
      date datetime DEFAULT CURRENT_TIMESTAMP,
-     FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser),
-     FOREIGN KEY (notifier) REFERENCES Utenti(IDuser),
-     FOREIGN KEY (IDpost) REFERENCES Post(IDpost)
+     FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser) ON DELETE CASCADE,
+     FOREIGN KEY (notifier) REFERENCES Utenti(IDuser) ON DELETE CASCADE,
+     FOREIGN KEY (IDpost) REFERENCES Post(IDpost) ON DELETE CASCADE
      );
 
 -- Tables structure for table `Iscrizioni`
@@ -103,8 +103,8 @@ CREATE TABLE Iscrizioni (
      IDuser int NOT NULL,
      IDpost int NOT NULL,
      PRIMARY KEY (IDuser, IDpost),
-     FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser),
-     FOREIGN KEY (IDpost) REFERENCES Post(IDpost)
+     FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser) ON DELETE CASCADE,
+     FOREIGN KEY (IDpost) REFERENCES Post(IDpost) ON DELETE CASCADE
      );
 
 -- Tables structure for table `Likes`
@@ -112,8 +112,8 @@ CREATE TABLE Iscrizioni (
 CREATE TABLE Likes (
      IDpost int NOT NULL,
      IDuser int NOT NULL,
-     FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser),
-     FOREIGN KEY (IDpost) REFERENCES Post(IDpost),
+     FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser) ON DELETE CASCADE,
+     FOREIGN KEY (IDpost) REFERENCES Post(IDpost) ON DELETE CASCADE,
      PRIMARY KEY(IDpost,IDuser)
      );
 
@@ -122,7 +122,7 @@ CREATE TABLE Likes (
 CREATE TABLE Login_attempts (
      IDuser int NOT NULL,
      attemptNum varchar(30) NOT NULL,
-     FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser),
+     FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser) ON DELETE CASCADE,
      PRIMARY KEY(IDuser,attemptNum)
      );
 

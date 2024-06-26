@@ -3,6 +3,7 @@ require_once("bootstrap.php");
 $templateParams["navbar"] = "template/navbar.html";
 $templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js", "js/logout.js");
 $templateParams["main"] = "template/notification_list.php";
+$templateParams["header"] = "template/header.php";
 
 if (isset($_SESSION["idUser"])) {
     $templateParams["user"] = $_SESSION["idUser"];
@@ -40,7 +41,7 @@ foreach ($notifications as &$notification) {
     }
 }
 
-var_dump($updatedNotifications); // Debugging
+//var_dump($updatedNotifications); // Debugging
 
 $templateParams["title"] = "Notifiche - EventGram";
 $templateParams["notifications"] = [
@@ -49,6 +50,8 @@ $templateParams["notifications"] = [
     "this_month" => $this_month,
     "earlier" => $earlier
 ];
+
+$templateParams["header"] = "template/header.php";
 
 require_once("template/base.php");
 ?>
