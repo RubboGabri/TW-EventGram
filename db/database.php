@@ -97,6 +97,14 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getUserByPost($idPost) {
+        $stmt = $this->prepare("SELECT U.IDuser, P.title FROM Post P JOIN Utenti U ON P.IDuser = U.IDuser WHERE P.IDpost = ?");
+        $stmt->bind_param('i', $idPost);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getUserStats($IDuser){
         $query = "SELECT P.numPost, FR.numFollower, FD.numFollowed FROM (SELECT COUNT(IDpost) AS numPost FROM Post WHERE IDuser=?) AS P,
                     (SELECT COUNT(IDfollower) AS numFollower FROM Follower WHERE IDfollowed=?) AS FR,
@@ -108,11 +116,33 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getFollowers($IDuser) {
+        $stmt = $this->prepare("SELECT IDfollower FROM Follower WHERE IDfollowed = ?");
+        $stmt->bind_param('i', $IDuser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function insertNotification($type, $IDuser, $notifier, $IDpost = null) {
         $stmt = $this->prepare("INSERT INTO Notifiche (type, IDuser, notifier, IDpost) VALUES (?, ?, ?, ?)");
         $stmt->bind_param('siii', $type, $IDuser, $notifier, $IDpost);
         $stmt->execute();
         return $stmt->insert_id;
+    }
+
+    public function getNotifications($IDuser) {
+        $stmt = $this->prepare("
+            SELECT N.*, P.title AS post_title
+            FROM Notifiche N
+            LEFT JOIN Post P ON N.IDpost = P.IDpost
+            WHERE N.IDuser = ?
+            ORDER BY N.date DESC
+        ");
+        $stmt->bind_param('i', $IDuser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     public function isFollowing($IDfollower, $IDfollowed){
@@ -128,14 +158,6 @@ class DatabaseHelper {
         $stmt->bind_param('ii', $IDfollower, $IDfollowed);
         $stmt->execute();
         return $stmt->insert_id;
-    }
-
-    public function getNotifications($IDuser) {
-        $stmt = $this->prepare("SELECT * FROM Notifiche WHERE IDuser = ? ORDER BY date DESC");
-        $stmt->bind_param('i', $IDuser);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     public function getAllPosts() {
@@ -159,8 +181,6 @@ class DatabaseHelper {
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
-    
-    
 
     public function getUserPosts($idUser) {
         $query = "
@@ -204,7 +224,7 @@ class DatabaseHelper {
         $stmt->send_long_data(0, $imgFile);
    
         if ($stmt->execute()) {
-            return true;
+            return $stmt->insert_id;
         } else {
             return false;
         }
