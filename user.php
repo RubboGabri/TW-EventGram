@@ -1,7 +1,7 @@
 <?php
 require_once("bootstrap.php");
 $templateParams["navbar"] = "template/navbar.html";
-$templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js", "js/logout.js", "js/user.js");
+$templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js", "js/logout.js", "js/user.js", "js/post.js");
 
 $templateParams["postList"] = "template/post.php";
 

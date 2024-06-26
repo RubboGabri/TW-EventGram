@@ -138,19 +138,27 @@ class DatabaseHelper {
     }
 
     public function getAllPosts() {
-        $query = "SELECT P.IDpost, P.img, P.title, P.description, P.eventDate, P.IDuser, P.IDlocation, P.price, P.IDcategoria, P.minAge, L.name AS location, C.name AS category, U.username, U.profilePic,
-                         (SELECT COUNT(*) FROM Likes WHERE Likes.IDpost = P.IDpost) AS numLikes,
-                         (SELECT COUNT(*) FROM Commenti WHERE Commenti.IDpost = P.IDpost) AS numComments
-                  FROM Post P 
-                  JOIN Locations L ON P.IDlocation = L.IDlocation 
-                  JOIN Categorie C ON P.IDcategoria = C.IDcategory 
-                  JOIN Utenti U ON P.IDuser = U.IDuser
-                  ORDER BY P.postDate DESC";
+        $query = "
+            SELECT
+                P.*,
+                L.name AS location,
+                C.name AS category,
+                U.username,
+                U.profilePic,
+                I.numLikes,
+                I.numComments
+            FROM Post P 
+            JOIN Locations L ON P.IDlocation = L.IDlocation 
+            JOIN Categorie C ON P.IDcategoria = C.IDcategory 
+            JOIN Utenti U ON P.IDuser = U.IDuser
+            LEFT JOIN Infopost I ON P.IDpost = I.IDpost
+            ORDER BY P.postDate DESC";
         $stmt = $this->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+    
     
 
     public function getUserPosts($idUser) {
@@ -159,7 +167,8 @@ class DatabaseHelper {
                 P.*, 
                 L.name AS location, 
                 C.name AS category, 
-                U.username, 
+                U.username,
+                U.profilePic,
                 I.numLikes, 
                 I.numComments
             FROM Post P
@@ -253,7 +262,8 @@ class DatabaseHelper {
                         P.*, 
                         L.name AS location, 
                         C.name AS category, 
-                        U.username, 
+                        U.username,
+                        U.profilePic, 
                         I.numLikes, 
                         I.numComments
                     FROM Iscrizioni S
@@ -269,6 +279,42 @@ class DatabaseHelper {
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
-    }  
+    }
+
+    public function insertSubscription($IDuser, $IDpost) {
+        $stmt = $this->prepare("INSERT INTO Iscrizioni (IDuser, IDpost) VALUES (?, ?)");
+        $stmt->bind_param('ii', $IDuser, $IDpost);
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
+
+    public function removeSubscription($IDuser, $IDpost) {
+        $stmt = $this->prepare("DELETE FROM Iscrizioni WHERE IDuser=? AND IDpost=?");
+        $stmt->bind_param('ii', $IDuser, $IDpost);
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
+
+    public function insertLike($IDpost, $IDuser) {
+        $stmt = $this->prepare("INSERT INTO Likes (IDpost, IDuser) VALUES (?, ?)");
+        $stmt->bind_param('ii', $IDpost, $IDuser);
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
+
+    public function removeLike($IDpost, $IDuser) {
+        $stmt = $this->prepare("DELETE FROM Likes WHERE IDpost=? AND IDuser=?");
+        $stmt->bind_param('ii', $IDpost, $IDuser);
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
+
+    public function isLiking($IDpost, $IDuser) {
+        $stmt = $this->prepare("SELECT * FROM Likes WHERE IDpost=? AND IDuser=?");
+        $stmt->bind_param('ii', $IDpost, $IDuser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->num_rows > 0;
+    }
 }
 ?>

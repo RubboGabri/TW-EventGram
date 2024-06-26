@@ -7,7 +7,7 @@
                         <?php if ($post['profilePic'] != NULL): ?>
                             <img src="data:image/jpeg;base64,<?php echo base64_encode($post['profilePic']); ?>" alt="Profile picture" class="img-fluid" style="max-height: 20px; margin-right: 3px;"/>
                         <?php else: ?>
-                            <img src="img/profile.png" alt="Profile picture" class="img-fluid" style="max-height: 20px; margin-right: 3px;"/>
+                            <img src="../img/profile.png" alt="Profile picture" class="img-fluid" style="max-height: 20px; margin-right: 3px;"/>
                         <?php endif; ?>
                         <span style="font-weight: bold;"><?php echo htmlspecialchars($post['username']); ?></span>
                     </a>
@@ -23,9 +23,14 @@
             </div>
             <div class="d-flex justify-content-between card-footer">
                 <div>
-                    <a href="#" class="card-link d-flex align-items-center text-decoration-none">
-                        <img src="img/like_outlined.png" alt="Like" class="img-fluid" style="max-height: 20px"/>
-                        <span style="color: #000000; margin-left: 5px;"><?php echo htmlspecialchars($post['numLikes']); ?></span>
+                    <a href="javascript:void(0)" class="card-link d-flex align-items-center text-decoration-none like-btn" data-post-id="<?php echo $post['IDpost']; ?>">
+                        <?php
+                            if ($dbh->isLiking($post["IDpost"], $_SESSION["idUser"]))
+                                echo '<img src="../img/like_red.png" alt="Like" class="img-fluid like-icon" style="max-height: 20px"/> ';
+                            else
+                                echo '<img src="../img/like_empty.png" alt="Like" class="img-fluid like-icon" style="max-height: 20px"/> ';
+                        ?>
+                        <span class="like-count" style="color: #000000; margin-left: 5px;"><?php echo htmlspecialchars($post['numLikes']); ?></span>
                     </a>
                 </div>
                 <div>
@@ -38,4 +43,3 @@
         </div>
     </div>
 <?php endforeach; ?>
- 
