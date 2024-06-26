@@ -8,12 +8,18 @@
                 foreach ($notifications as $notification) {
                     echo '<li class="list-group-item d-flex align-items-center">';
                     // Immagine del profilo con link
-                    echo '<a href="user.php?id=' . htmlspecialchars($notification['notifier']) . '">';
-                    echo '<img src="img/profile.png" alt="Profile Image" class="img-fluid me-3" style="max-height: 40px;">';
+                    echo '<a href="user.php?id=' . htmlspecialchars($notification['notifier_id']) . '">';
+                    if ($notification['notifier_pic'] != NULL) {
+                        $base64Image = base64_encode($notification['notifier_pic']);
+                        $imageSrc = 'data:image/jpeg;base64,' . $base64Image;
+                        echo '<img src="' . $imageSrc . '" alt="Profile Image" class="img-fluid me-3" style="max-height: 40px;">';
+                    } else {
+                        echo '<img src="img/profile.png" alt="Profile Image" class="img-fluid me-3" style="max-height: 40px;">';
+                    }
                     echo '</a>';
                     echo '<span>';
                     // Nome dell'utente con link
-                    echo '<a href="user.php?id=' . htmlspecialchars($notification['notifier']) . '" class="fw-bold text-decoration-none text-dark">';
+                    echo '<a href="user.php?id=' . htmlspecialchars($notification['notifier_id']) . '" class="fw-bold text-decoration-none text-dark">';
                     echo htmlspecialchars($notification['notifier_username']);
                     echo '</a> ';
                     // Descrizione della notifica
