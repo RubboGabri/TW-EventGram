@@ -138,25 +138,20 @@ class DatabaseHelper {
     }
 
     public function getAllPosts() {
-        $query = "
-            SELECT 
-                P.*, 
-                L.name AS location, 
-                C.name AS category, 
-                U.username, 
-                I.numLikes, 
-                I.numComments
-            FROM Post P
-            JOIN Locations L ON P.IDlocation = L.IDlocation 
-            JOIN Categorie C ON P.IDcategoria = C.IDcategory 
-            JOIN Utenti U ON P.IDuser = U.IDuser
-            LEFT JOIN Infopost I ON P.IDpost = I.IDpost
-            ORDER BY P.postDate DESC";
+        $query = "SELECT P.IDpost, P.img, P.title, P.description, P.eventDate, P.IDuser, P.IDlocation, P.price, P.IDcategoria, P.minAge, L.name AS location, C.name AS category, U.username, U.profilePic,
+                         (SELECT COUNT(*) FROM Likes WHERE Likes.IDpost = P.IDpost) AS numLikes,
+                         (SELECT COUNT(*) FROM Commenti WHERE Commenti.IDpost = P.IDpost) AS numComments
+                  FROM Post P 
+                  JOIN Locations L ON P.IDlocation = L.IDlocation 
+                  JOIN Categorie C ON P.IDcategoria = C.IDcategory 
+                  JOIN Utenti U ON P.IDuser = U.IDuser
+                  ORDER BY P.postDate DESC";
         $stmt = $this->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+    
 
     public function getUserPosts($idUser) {
         $query = "

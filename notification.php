@@ -3,6 +3,7 @@ require_once("bootstrap.php");
 $templateParams["navbar"] = "template/navbar.html";
 $templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js", "js/logout.js");
 $templateParams["main"] = "template/notification_list.php";
+$templateParams["header"] = "template/header.php";
 
 if (isset($_SESSION["idUser"])) {
     $templateParams["user"] = $_SESSION["idUser"];

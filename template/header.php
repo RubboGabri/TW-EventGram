@@ -28,10 +28,12 @@ $firstWord = strtok($title, ' ');
             break;
 
         default:
-            if (($user["IDuser"] != $_SESSION["idUser"])) {
+            if (isset($user) && $user["IDuser"] != $_SESSION["idUser"]) {
                 echo '<a href="home.php" class="d-flex align-items-center m-2 p-1"> <img src="img/back.png" alt="Back" class="img-fluid" style="max-height: 30px"/> </a>';
             }
-            echo '<span class="position-absolute top-50 start-50 translate-middle d-flex align-items-center fs-4 fw-bold">' . htmlspecialchars($user["username"]) . '</span>';
+            if (isset($user)) {
+                echo '<span class="position-absolute top-50 start-50 translate-middle d-flex align-items-center fs-4 fw-bold">' . htmlspecialchars($user["username"]) . '</span>';
+            }
             echo '<a href="index.php" onclick="logout()" class="ms-auto d-flex align-items-center m-2 p-1 text-decoration-none text-danger">';
             echo '<span class="mx-3 fs-5 fw-semibold">Esci</span>';
             echo '</a>';
@@ -39,3 +41,4 @@ $firstWord = strtok($title, ' ');
     }
     ?>
 </header>
+
