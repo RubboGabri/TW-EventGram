@@ -108,11 +108,12 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    /*public function inserNotification($type, $IDuser, $notifier, $IDpost = null) {
+    public function insertNotification($type, $IDuser, $notifier, $IDpost = null) {
         $stmt = $this->prepare("INSERT INTO Notifiche (type, IDuser, notifier, IDpost) VALUES (?, ?, ?, ?)");
         $stmt->bind_param('siii', $type, $IDuser, $notifier, $IDpost);
-        $stmt->bind_param();
-    }*/
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
 
     public function isFollowing($IDfollower, $IDfollowed){
         $stmt = $this->prepare("SELECT * FROM Follower WHERE IDfollower=? AND IDfollowed=?");

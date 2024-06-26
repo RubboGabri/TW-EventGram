@@ -129,10 +129,9 @@ switch ($_REQUEST['op']) {
     case 'follow':
         if (isset($_SESSION['idUser']) && isset($_POST["idFollowed"])) {
             $dbh->insertFollower($loggedUser, $_POST["idFollowed"]);
+            $dbh->insertNotification('Follow', $_POST["idFollowed"], $loggedUser);
             $result["esito"] = true;
             $result["errore"] = "Nessuno";
-        
-            //$dbh->notifyFollow($loggedUser, $_POST["idFollowed"]);
         
             header('Content-Type: application/json');
             echo json_encode($result);
