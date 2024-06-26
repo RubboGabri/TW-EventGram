@@ -7,7 +7,7 @@
                         $base64Image = base64_encode($user['profilePic']);
                         $imageSrc = 'data:image/jpeg;base64,' . $base64Image;
                         echo $imageSrc;
-                    } else echo 'img/profile.png'; ?>" 
+                    } else echo '../img/profile.png'; ?>" 
                     alt="Profile Picture" class="img-fluid" style="max-height: 150px">
     </picture>
     <div class="text-center mb-3">

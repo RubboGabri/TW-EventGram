@@ -207,6 +207,28 @@ switch ($_REQUEST['op']) {
             echo json_encode($result);
         }
         break;
+
+    case 'addLike':
+        if (isset($_POST["idPost"])) {
+            $dbh->insertLike($_POST["idPost"], $loggedUser);
+            $result["esito"] = true;
+            $result["errore"] = "Nessuno";
+        
+            header('Content-Type: application/json');
+            echo json_encode($result);
+        }
+        break;
+
+    case 'removeLike':
+        if (isset($_POST["idPost"])) {
+            $dbh->removeLike($_POST["idPost"], $loggedUser);
+            $result["esito"] = true;
+            $result["errore"] = "Nessuno";
+        
+            header('Content-Type: application/json');
+            echo json_encode($result);
+        }
+        break;
     
     default:
         echo json_encode(["errore" => "Operazione non valida"]);
