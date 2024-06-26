@@ -73,3 +73,10 @@
 .card-footer {
     font-size: 1.25rem;
 }
+
+.card-img {
+    width: 100%;
+    height: 200px;
+    padding: 10px; /* Aggiunge spazio interno intorno all'immagine */
+    object-fit: cover;
+}
