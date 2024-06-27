@@ -51,7 +51,7 @@ async function createPost(title, description, eventDate, location, category, pri
         });
 
         if (response.data["esito"] === true) {
-            return { esito: true, IDpost: response.data["IDpost"] };
+            return { esito: true, IDpost: response.data["IDpost"], postTitle: response.data["postTitle"] };
         } else {
             return { esito: false, errore: response.data["errore"] };
         }

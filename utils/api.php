@@ -90,12 +90,14 @@ switch ($_REQUEST['op']) {
         break;
 
     case 'createPost':
-        if (isset($_POST["op"]) && $_POST["op"] == "createPost" && isset($_POST["title"])
-                && isset($_POST["description"]) && isset($_POST["eventDate"]) && isset($_POST["location"])
-                && isset($_POST["category"]) && isset($_POST["price"])) {
+        if (
+            isset($_POST["op"]) && $_POST["op"] == "createPost" && isset($_POST["title"])
+            && isset($_POST["description"]) && isset($_POST["eventDate"]) && isset($_POST["location"])
+            && isset($_POST["category"]) && isset($_POST["price"])
+        ) {
             $result["esito"] = false;
             $result["errore"] = "";
- 
+
             // Ottieni i dati dal modulo
             $title = $_POST['title'];
             $description = $_POST['description'];
@@ -104,35 +106,40 @@ switch ($_REQUEST['op']) {
             $category = $_POST['category'];
             $price = $_POST['price'];
             $minAge = isset($_POST['minAge']) ? $_POST['minAge'] : null;
-        
+
             // Gestione del caricamento dell'immagine
             $imgData = null;
             if (isset($_FILES['imgFile']) && $_FILES['imgFile']['error'] === UPLOAD_ERR_OK) {
                 $imgTmpPath = $_FILES['imgFile']['tmp_name'];
                 $imgData = file_get_contents($imgTmpPath); // Ottieni il contenuto dell'immagine
             }
-            
+
             // Chiama la funzione per creare il post
             $postCreated = $dbh->createPost($imgData, $title, $description, $eventDate, $loggedUser, $location, $price, $category, $minAge);
-        
+
             if ($postCreated) {
+                // Ottieni i follower dell'utente
+                $followers = $dbh->getFollowers($loggedUser);
+                foreach ($followers as $follower) {
+                    $dbh->insertNotification('Post', $follower['IDfollower'], $loggedUser, $postCreated);
+                }
                 $result["esito"] = true;
             } else {
                 $result["errore"] = "Errore nella creazione del post.";
             }
-        
+
             header('Content-Type: application/json');
             echo json_encode($result);
         }
-        break;        
-        
+        break;
+
     case 'follow':
         if (isset($_SESSION['idUser']) && isset($_POST["idFollowed"])) {
             $dbh->insertFollower($loggedUser, $_POST["idFollowed"]);
             $dbh->insertNotification('Follow', $_POST["idFollowed"], $loggedUser);
             $result["esito"] = true;
             $result["errore"] = "Nessuno";
-        
+
             header('Content-Type: application/json');
             echo json_encode($result);
         }
@@ -143,7 +150,7 @@ switch ($_REQUEST['op']) {
             $dbh->removeFollower($loggedUser, $_POST["idFollowed"]);
             $result["esito"] = true;
             $result["errore"] = "Nessuno";
-        
+
             header('Content-Type: application/json');
             echo json_encode($result);
         }
@@ -153,12 +160,12 @@ switch ($_REQUEST['op']) {
         if (isset($_POST["username"]) && isset($_POST["info"])) {
             $result["esito"] = false;
             $result["errore"] = "Non so!";
-                
+
             $username = $_POST["username"];
             $info = $_POST["info"];
             $removeImage = isset($_POST["removeImage"]) && $_POST["removeImage"] === '1';
             $pic = isset($_FILES["pic"]) ? $_FILES["pic"] : null;
-        
+
             if (empty(trim($info))) {
                 $info = null;
             }
@@ -175,19 +182,19 @@ switch ($_REQUEST['op']) {
                 } else {
                     $update_result = $dbh->updateUser($_SESSION["idUser"], $username, $info);
                 }
-        
+
                 if ($update_result) {
                     $result["esito"] = true;
                 } else {
                     $result["errore"] = "Errore durante l'aggiornamento del profilo.";
                 }
             }
-        
+
             header('Content-Type: application/json');
             echo json_encode($result);
         }
         break;
-              
+
     case 'deleteAccount':
         $result["esito"] = false;
         $result["errore"] = "Non so!";
@@ -209,11 +216,17 @@ switch ($_REQUEST['op']) {
 
     case 'addLike':
         if (isset($_POST["idPost"])) {
-            $dbh->insertLike($_POST["idPost"], $loggedUser);
+            $idPost = $_POST["idPost"];
+            $dbh->insertLike($idPost, $loggedUser);
+
+            $postOwner = $dbh->getUserByPost($idPost);
+            $ownerId = $postOwner[0]['IDuser'];
+            $postTitle = $postOwner[0]['title'];
+            $dbh->insertNotification('Like', $ownerId, $loggedUser, $idPost);
+
             $result["esito"] = true;
             $result["errore"] = "Nessuno";
-        
-            header('Content-Type: application/json');
+
             echo json_encode($result);
         }
         break;
@@ -223,12 +236,12 @@ switch ($_REQUEST['op']) {
             $dbh->removeLike($_POST["idPost"], $loggedUser);
             $result["esito"] = true;
             $result["errore"] = "Nessuno";
-        
+
             header('Content-Type: application/json');
             echo json_encode($result);
         }
         break;
-    
+
     default:
         echo json_encode(["errore" => "Operazione non valida"]);
         break;
