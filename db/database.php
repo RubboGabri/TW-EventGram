@@ -245,6 +245,7 @@ class DatabaseHelper {
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
     public function removeFollower($IDfollower, $IDfollowed){
         $stmt = $this->prepare("DELETE FROM Follower WHERE IDfollower=? AND IDfollowed=?");
         $stmt->bind_param('ii', $IDfollower, $IDfollowed);
@@ -302,18 +303,24 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function insertSubscription($IDuser, $IDpost) {
-        $stmt = $this->prepare("INSERT INTO Iscrizioni (IDuser, IDpost) VALUES (?, ?)");
-        $stmt->bind_param('ii', $IDuser, $IDpost);
+    public function isSubscribed($postId, $userId) {
+        $stmt = $this->prepare("SELECT * FROM Iscrizioni WHERE IDpost = ? AND IDuser = ?");
+        $stmt->bind_param('ii', $postId, $userId);
         $stmt->execute();
-        return $stmt->insert_id;
+        $result = $stmt->get_result();
+        return $result->num_rows > 0;
     }
 
-    public function removeSubscription($IDuser, $IDpost) {
-        $stmt = $this->prepare("DELETE FROM Iscrizioni WHERE IDuser=? AND IDpost=?");
-        $stmt->bind_param('ii', $IDuser, $IDpost);
-        $stmt->execute();
-        return $stmt->insert_id;
+    public function insertSubscription($userId, $postId) {
+        $stmt = $this->prepare("INSERT INTO Iscrizioni (IDuser, IDpost) VALUES (?, ?)");
+        $stmt->bind_param('ii', $userId, $postId);
+        return $stmt->execute();
+    }
+
+    public function removeSubscription($userId, $postId) {
+        $stmt = $this->prepare("DELETE FROM Iscrizioni WHERE IDuser = ? AND IDpost = ?");
+        $stmt->bind_param('ii', $userId, $postId);
+        return $stmt->execute();
     }
 
     public function insertLike($IDpost, $IDuser) {

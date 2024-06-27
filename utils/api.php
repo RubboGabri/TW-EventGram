@@ -245,6 +245,20 @@ switch ($_REQUEST['op']) {
             echo json_encode($result);
         }
         break;
+    case 'subscribeToPost':
+        if (isset($_POST['idPost']) && isUserLoggedIn()) {
+            $result = $dbh->insertSubscription($_SESSION["idUser"], $_POST['idPost']);
+            echo json_encode(["esito" => $result]);
+        }
+        break;
+        
+    case 'unsubscribeToPost':
+        if (isset($_POST['idPost']) && isUserLoggedIn()) {
+            $result = $dbh->removeSubscription($_SESSION["idUser"], $_POST['idPost']);
+            echo json_encode(["esito" => $result]);
+        }
+        break;
+        
 
     default:
         echo json_encode(["errore" => "Operazione non valida"]);
