@@ -11,10 +11,10 @@ document.addEventListener("DOMContentLoaded", async function() {
             listItem.className = "list-group-item d-flex align-items-center";
 
             const imgLink = document.createElement("a");
-            imgLink.href = `template/user_profile.php?id=${notification.notifier}`;
+            imgLink.href = `user.php?id=${notification.notifier}`;
 
             const img = document.createElement("img");
-            img.src = "img/profile.png";
+            img.src = notification.notifier_pic ? `data:image/jpeg;base64,${notification.notifier_pic}` : "img/profile.png";
             img.alt = "Profile Image";
             img.className = "img-fluid me-3";
             img.style.maxHeight = "40px";
@@ -22,27 +22,26 @@ document.addEventListener("DOMContentLoaded", async function() {
             imgLink.appendChild(img);
 
             const notificationText = document.createElement("span");
-
             const usernameLink = document.createElement("a");
-            usernameLink.href = `template/user_profile.php?id=${notification.notifier}`;
+            usernameLink.href = `user.php?id=${notification.notifier}`;
             usernameLink.textContent = notification.notifier_username;
             usernameLink.className = "fw-bold text-decoration-none text-dark";
 
             switch (notification.type) {
                 case 'Comment':
-                    notificationText.append(usernameLink, ` ha commentato il tuo post ${notification.IDpost}`);
+                    notificationText.append(usernameLink, ` ha commentato il tuo post "${notification.post_title || ''}"`);
                     break;
                 case 'Like':
-                    notificationText.append(usernameLink, ` ha messo mi piace al tuo post ${notification.IDpost}`);
+                    notificationText.append(usernameLink, ` ha messo mi piace al tuo post "${notification.post_title || ''}"`);
                     break;
                 case 'Follow':
                     notificationText.append(usernameLink, ` ha iniziato a seguirti`);
                     break;
                 case 'Post':
-                    notificationText.append(usernameLink, ` ha pubblicato un nuovo post`);
+                    notificationText.append(usernameLink, ` ha pubblicato un nuovo post "${notification.post_title || ''}"`);
                     break;
                 default:
-                    notificationText.append("tipo di notifica sconosciuto");
+                    notificationText.append(" tipo di notifica sconosciuto");
             }
 
             listItem.appendChild(imgLink);
