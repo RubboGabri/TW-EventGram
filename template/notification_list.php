@@ -1,5 +1,5 @@
-<div class="container min-vh-100 d-flex flex-column ps-4">
-    <h1>Notifiche</h1>
+<div class="container min-vh-100 d-flex flex-column ps-4 <?php if(isset($header_offset)) echo $header_offset ?>">
+<h1 class="d-none d-md-block text-center pt-4">Notifiche</h1>
     <ul class="list-group">
         <?php
         function renderNotifications($title, $notifications) {
@@ -8,7 +8,7 @@
                 foreach ($notifications as $notification) {
                     echo '<li class="list-group-item d-flex align-items-center">';
                     // Immagine del profilo con link
-                    echo '<a href="user.php?id=' . htmlspecialchars($notification['notifier_id']) . '">';
+                    echo '<a href="user.php?id=' . urlencode($notification['notifier']) . '">';
                     if ($notification['notifier_pic'] != NULL) {
                         $base64Image = base64_encode($notification['notifier_pic']);
                         $imageSrc = 'data:image/jpeg;base64,' . $base64Image;
