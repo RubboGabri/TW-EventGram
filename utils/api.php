@@ -139,7 +139,6 @@ switch ($_REQUEST['op']) {
             $dbh->insertNotification('Follow', $_POST["idFollowed"], $loggedUser);
             $result["esito"] = true;
             $result["errore"] = "Nessuno";
-
             header('Content-Type: application/json');
             echo json_encode($result);
         }
