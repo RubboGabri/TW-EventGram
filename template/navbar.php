@@ -12,7 +12,13 @@
         </li>
         <li class="d-flex justify-content-center align-items-center" style="min-width: 33.33%">
             <a href="user.php">
-                <img src="../img/profile.png" alt="Profilo" class="img-fluid" style="max-height: 25px">
+                <?php
+                    $currentUser = $dbh->getUserById($_SESSION["idUser"])[0];
+                    if ($currentUser["profilePic"] != NULL)
+                        echo '<img src="data:image/jpeg;base64,' . base64_encode($currentUser["profilePic"]) . '" alt="Profilo" class="img-fluid border border-dark rounded-circle" style="max-height: 25px">';
+                    else
+                        echo '<img src="../img/profile.png" alt="Profilo" class="img-fluid" style="max-height: 25px">';
+                ?>
             </a>
         </li>
     </ul>
@@ -46,7 +52,13 @@
         </li>
         <li class="navbar-item">
             <a href="user.php" class="d-flex align-items-center my-4 p-1 text-decoration-none text-dark">
-                <img src="../img/profile.png" alt="Profilo" class="img-fluid" style="max-height: 40px">
+                <?php
+                    $currentUser = $dbh->getUserById($_SESSION["idUser"])[0];
+                    if ($currentUser["profilePic"] != NULL)
+                        echo '<img src="data:image/jpeg;base64,' . base64_encode($currentUser["profilePic"]) . '" alt="Profilo" class="img-fluid border border-dark rounded-circle" style="max-height: 40px">';
+                    else
+                        echo '<img src="../img/profile.png" alt="Profilo" class="img-fluid" style="max-height: 40px">';
+                ?>
                 <span class="d-none d-lg-block ms-5 me-5 fs-5 fw-semibold">Profilo</span>
                 <div class="mask rounded" style="background-color: hsla(0, 3%, 6%, 0.2)"></div>
             </a>                

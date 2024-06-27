@@ -26,16 +26,16 @@
                     <a href="javascript:void(0)" class="card-link d-flex align-items-center text-decoration-none like-btn" data-post-id="<?php echo $post['IDpost']; ?>">
                         <?php
                             if ($dbh->isLiking($post["IDpost"], $_SESSION["idUser"]))
-                                echo '<img src="../img/like_red.png" alt="Like" class="img-fluid like-icon" style="max-height: 20px"/> ';
+                                echo '<img src="../img/like_red.png" alt="Like" class="img-fluid like-icon" style="max-height: 25px"/> ';
                             else
-                                echo '<img src="../img/like_empty.png" alt="Like" class="img-fluid like-icon" style="max-height: 20px"/> ';
+                                echo '<img src="../img/like_empty.png" alt="Like" class="img-fluid like-icon" style="max-height: 25px"/> ';
                         ?>
                         <span class="like-count" style="color: #000000; margin-left: 5px;"><?php echo htmlspecialchars($post['numLikes']); ?></span>
                     </a>
                 </div>
                 <div>
                     <a href="#" class="card-link d-flex align-items-center text-decoration-none">
-                        <img src="img/comment.png" alt="Comment" class="img-fluid" style="max-height: 20px;"/>
+                        <img src="img/comment.png" alt="Comment" class="img-fluid" style="max-height: 22px;"/>
                         <span style="color: #000000; margin-left: 5px;"><?php echo htmlspecialchars($post['numComments']); ?></span>
                     </a>
                 </div>

@@ -76,7 +76,7 @@
         </div>
     </div>
     <div class="col-12 mt-3">
-        <div class="row posts-section">
+        <div class="col col-md-6 mx-auto posts-section">
             <div id="postsContent">
                 <?php if (count($userPosts) == 0): ?>
                     <div class="no-content d-flex flex-column align-items-center justify-content-center" style="height: 40vh;">
@@ -92,7 +92,7 @@
                 <?php endif; ?>
             </div>
         </div>
-        <div class="row subscriptions-section d-none">
+        <div class="col col-md-6 mx-auto subscriptions-section d-none">
             <div id="subscriptionsContent">
                 <?php if (count($userSubs) == 0): ?>
                     <div class="no-content d-flex flex-column align-items-center justify-content-center" style="height: 40vh;">

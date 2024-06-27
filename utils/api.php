@@ -55,6 +55,7 @@ switch ($_REQUEST['op']) {
         logout();
         break;
 
+    // api.php
     case 'getNotifications':
         $notifications = $dbh->getNotifications($loggedUser);
 
@@ -74,6 +75,9 @@ switch ($_REQUEST['op']) {
             $userInfo = $dbh->getUserById($notification['notifier']);
             $user = $userInfo[0];
             $notification['notifier_username'] = $user['username'];
+            if ($user['profilePic'] != null) {
+                $notification['notifier_pic'] = base64_encode($user['profilePic']);
+            }
 
             if ($interval->days == 0) {
                 $groupedNotifications["today"][] = $notification;
@@ -88,6 +92,7 @@ switch ($_REQUEST['op']) {
 
         echo json_encode($groupedNotifications);
         break;
+
 
     case 'createPost':
         if (

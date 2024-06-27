@@ -39,17 +39,23 @@
     opacity: 1;
 }
 
-.list-group-item {
+#notifications .list-group-item {
     border-radius: 25px; /* Angoli arrotondati */
     background-color: rgba(184, 184, 184, 0.4); /* Colore grigio con bassa opacità */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombra sotto ogni riga */
     margin-bottom: 10px; /* Spazio tra le righe */
     border: none; /* Rimuovere il bordo predefinito */
+    display: flex;
+    align-items: flex-start;
 }
 
-.list-group-item img {
-    max-height: 40px;
-    margin-right: 15px;
+#notifications .list-group-item img {
+    width: 40px;
+    height: 40px;
+}
+
+#notifications .list-group-item span {
+    word-wrap: break-word; /* Forza il testo ad andare a capo se troppo lungo */
 }
 
 .card {

@@ -14,12 +14,12 @@ $firstWord = strtok($title, ' ');
             break;
 
         case 'Modifica':
-            echo '<a href="user.php" class="d-flex align-items-center m-2 p-1"> <img src="img/back.png" alt="Back" class="img-fluid" style="max-height: 30px"/> </a>';
+            echo '<a href="user.php" class="d-flex align-items-center m-2 p-1"> <img src="img/back.png" alt="Back" class="img-fluid" style="max-height: 25px"/> </a>';
             echo '<span class="position-absolute top-50 start-50 translate-middle d-flex align-items-center fs-4 fw-bold">Modifica profilo</span>';
             break;
 
         case 'Notifiche':
-            echo '<a href="home.php" class="d-flex align-items-center m-2 p-1"> <img src="img/back.png" alt="Back" class="img-fluid" style="max-height: 30px"/> </a>';
+            echo '<a href="home.php" class="d-flex align-items-center m-2 p-1"> <img src="img/back.png" alt="Back" class="img-fluid" style="max-height: 27px"/> </a>';
             echo '<span class="position-absolute top-50 start-50 translate-middle d-flex align-items-center fs-4 fw-bold">Notifiche</span>';
             break;
 
