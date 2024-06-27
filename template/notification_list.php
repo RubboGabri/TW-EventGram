@@ -1,6 +1,6 @@
-<div class="container min-vh-100 d-flex flex-column ps-4">
-    <h1>Notifiche</h1>
-    <ul class="list-group">
+<div class="container min-vh-100 d-flex flex-column ps-4 <?php if(isset($header_offset)) echo $header_offset ?>">
+<h1 class="d-none d-md-block text-center pt-4">Notifiche</h1>
+    <ul class="list-group" style="border-radius: 25px">
         <?php
         function renderNotifications($title, $notifications) {
             if (count($notifications) > 0) {
@@ -8,12 +8,18 @@
                 foreach ($notifications as $notification) {
                     echo '<li class="list-group-item d-flex align-items-center">';
                     // Immagine del profilo con link
-                    echo '<a href="user.php?id=' . htmlspecialchars($notification['notifier']) . '">';
-                    echo '<img src="img/profile.png" alt="Profile Image" class="img-fluid me-3" style="max-height: 40px;">';
+                    echo '<a href="user.php?id=' . urlencode($notification['notifier']) . '">';
+                    if ($notification['notifier_pic'] != NULL) {
+                        $base64Image = base64_encode($notification['notifier_pic']);
+                        $imageSrc = 'data:image/jpeg;base64,' . $base64Image;
+                        echo '<img src="' . $imageSrc . '" alt="Profile Image" class="img-fluid me-3" style="max-height: 40px;">';
+                    } else {
+                        echo '<img src="img/profile.png" alt="Profile Image" class="img-fluid me-3" style="max-height: 40px;">';
+                    }
                     echo '</a>';
                     echo '<span>';
                     // Nome dell'utente con link
-                    echo '<a href="user.php?id=' . htmlspecialchars($notification['notifier']) . '" class="fw-bold text-decoration-none text-dark">';
+                    echo '<a href="user.php?id=' . htmlspecialchars($notification['notifier_id']) . '" class="fw-bold text-decoration-none text-dark">';
                     echo htmlspecialchars($notification['notifier_username']);
                     echo '</a> ';
                     // Descrizione della notifica

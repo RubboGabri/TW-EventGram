@@ -1,5 +1,5 @@
 <?php foreach ($postList as $post): ?>
-    <div class="col-md-4 pb-5">
+    <div class="col-12 pb-5">
         <div class="card">
             <div class="post-header p-3">
                 <div class="d-flex align-items-center">
@@ -14,7 +14,7 @@
                 </div>
             </div>
             <?php if ($post['img']): ?>
-                <img src="data:image/jpeg;base64,<?php echo base64_encode($post['img']); ?>" class="card-img-top card-img" alt="<?php echo htmlspecialchars($post['title']); ?>">
+                <img src="data:image/jpeg;base64,<?php echo base64_encode($post['img']); ?>" class="card-img p-2" style="border-radius: 25px;" alt="<?php echo htmlspecialchars($post['title']); ?>">
             <?php endif; ?>
             <div class="card-body p-3 py-2">
                 <h5 class="card-title mb-2" style="font-size: 30px;"><?php echo htmlspecialchars($post['title']); ?></h5>
