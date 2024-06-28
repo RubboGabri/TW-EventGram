@@ -10,7 +10,10 @@ $firstWord = strtok($title, ' ');
     switch ($firstWord) {
         case 'EventGram':
             echo '<span class="position-absolute top-50 start-50 translate-middle d-flex align-items-center fs-4 fw-bold">Home</span>';
-            echo '<a href="notification.php" class="ms-auto d-flex align-items-center m-2 p-3"> <img src="../img/notification.png" alt="Notifiche" class="img-fluid" style="max-height: 28px"/> </a>';
+            echo '<a href="notification.php" class="ms-auto d-flex align-items-center m-2 p-3 position-relative">';
+            echo '    <img src="../img/notification.png" alt="Notifiche" class="img-fluid" style="max-height: 28px"/>';
+            echo '    <span id="unread-notifications" class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle" style="display: none;"></span>';
+            echo '</a>';
             break;
 
         case 'Modifica':

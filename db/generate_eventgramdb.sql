@@ -92,6 +92,7 @@ CREATE TABLE Notifiche (
      notifier int NOT NULL,  
      IDpost int,  
      date datetime DEFAULT CURRENT_TIMESTAMP,
+     is_read tinyint NOT NULL DEFAULT 0,
      FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser) ON DELETE CASCADE,
      FOREIGN KEY (notifier) REFERENCES Utenti(IDuser) ON DELETE CASCADE,
      FOREIGN KEY (IDpost) REFERENCES Post(IDpost) ON DELETE CASCADE

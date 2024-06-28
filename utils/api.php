@@ -55,23 +55,22 @@ switch ($_REQUEST['op']) {
         logout();
         break;
 
-    // api.php
     case 'getNotifications':
         $notifications = $dbh->getNotifications($loggedUser);
-
+        
         // Raggruppa le notifiche per periodo di tempo
         $groupedNotifications = [
             "today" => [],
             "lastWeek" => [],
             "lastMonth" => [],
             "earlier" => []
-        ];
-
+            ];
+        
         $now = new DateTime();
         foreach ($notifications as $notification) {
             $notificationDate = new DateTime($notification['date']);
             $interval = $now->diff($notificationDate);
-
+        
             $userInfo = $dbh->getUserById($notification['notifier']);
             $user = $userInfo[0];
             $notification['notifier_username'] = $user['username'];
@@ -89,10 +88,17 @@ switch ($_REQUEST['op']) {
                 $groupedNotifications["earlier"][] = $notification;
             }
         }
-
+        
+        // Mark notifications as read
+        $dbh->markNotificationsAsRead($loggedUser);
+       
         echo json_encode($groupedNotifications);
         break;
 
+    case 'getUnreadNotificationCount':
+        $count = $dbh->getUnreadNotificationCount($loggedUser);
+        echo json_encode($count);
+        break;
 
     case 'createPost':
         if (
