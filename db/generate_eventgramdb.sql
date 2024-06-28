@@ -87,7 +87,7 @@ CREATE TABLE Follower (
 
 CREATE TABLE Notifiche (
      IDnotification int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-     type enum ('Follow','Comment','Post', 'Like') NOT NULL,
+     type enum ('Follow','Comment','Post', 'Like', 'Subscribe') NOT NULL,
      IDuser int NOT NULL,  
      notifier int NOT NULL,  
      IDpost int,  
