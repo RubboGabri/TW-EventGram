@@ -1,6 +1,6 @@
 <?php
 require_once 'bootstrap.php';
-$templateParams["navbar"] = "template/navbar.html";
+$templateParams["navbar"] = "template/navbar.php";
 $templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js", "js/update_profile.js", "js/logout.js");
 $templateParams["title"] = "Modifica profilo - EventGram";
 $templateParams["user"] = $_SESSION["idUser"];

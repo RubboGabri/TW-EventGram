@@ -7,7 +7,7 @@ if (isset($_SESSION["idUser"])) {
 }
 
 $templateParams["header"] = "template/header_profile.php";
-$templateParams["navbar"] = "template/navbar.html";
+$templateParams["navbar"] = "template/navbar.php";
 $templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js", "js/post.js", "js/logout.js");
 $templateParams["title"] = "EventGram";
 $templateParams["user"] = $_SESSION["idUser"];

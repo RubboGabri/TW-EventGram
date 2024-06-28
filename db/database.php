@@ -344,5 +344,21 @@ class DatabaseHelper {
         $result = $stmt->get_result();
         return $result->num_rows > 0;
     }
+    public function addComment($postId, $userId, $comment) {
+        $stmt = $this->prepare("INSERT INTO Commenti (IDpost, IDuser, text) VALUES (?, ?, ?)");
+        $stmt->bind_param('iis', $postId, $userId, $comment);
+        return $stmt->execute();
+    }
+    
+    public function getComments($postId) {
+        $stmt = $this->prepare("SELECT C.text, U.username FROM Commenti C JOIN Utenti U ON C.IDuser = U.IDuser WHERE C.IDpost = ? ORDER BY C.date DESC");
+        $stmt->bind_param('i', $postId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    
+    
+    
 }
 ?>

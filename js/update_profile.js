@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const file = imgInput.files[0];
         if (file) {
             removeImageFlag.value = '0'; // Reset the flag if a new image is selected
-            resizeImage(file, 200, 200, function(resizedDataUrl) {
+            resizeImage(file, 1000, 1000, function(resizedDataUrl) {
                 profilePicture.src = resizedDataUrl;
                 resizedImageInput.value = resizedDataUrl; // Store the resized image data URL in hidden input
             });

@@ -55,6 +55,7 @@ switch ($_REQUEST['op']) {
         logout();
         break;
 
+    // api.php
     case 'getNotifications':
         $notifications = $dbh->getNotifications($loggedUser);
 
@@ -74,6 +75,9 @@ switch ($_REQUEST['op']) {
             $userInfo = $dbh->getUserById($notification['notifier']);
             $user = $userInfo[0];
             $notification['notifier_username'] = $user['username'];
+            if ($user['profilePic'] != null) {
+                $notification['notifier_pic'] = base64_encode($user['profilePic']);
+            }
 
             if ($interval->days == 0) {
                 $groupedNotifications["today"][] = $notification;
@@ -88,6 +92,7 @@ switch ($_REQUEST['op']) {
 
         echo json_encode($groupedNotifications);
         break;
+
 
     case 'createPost':
         if (
@@ -253,7 +258,29 @@ switch ($_REQUEST['op']) {
             echo json_encode(["esito" => $result]);
         }
         break;
-        
+    case 'addComment':
+        if (isset($_POST['idPost']) && isset($_POST['comment']) && $loggedUser != -1) {
+            $result = $dbh->addComment($_POST['idPost'], $loggedUser, $_POST['comment']);
+            echo json_encode(["esito" => $result]);
+        } else {
+            echo json_encode(["esito" => false, "errore" => "Dati mancanti o utente non loggato."]);
+        }
+        break;
+    
+    case 'getComments':
+        if (isset($_POST['idPost'])) {
+            $comments = $dbh->getComments($_POST['idPost']);
+            // Genera l'HTML per i commenti
+            ob_start();
+            foreach ($comments as $comment) {
+                echo "<div class='comment'><strong>{$comment['username']}</strong>: {$comment['text']}</div>";
+            }
+            $html = ob_get_clean();
+            echo json_encode(["html" => $html]);
+        } else {
+            echo json_encode(["html" => ""]);
+        }
+        break;
 
     default:
         echo json_encode(["errore" => "Operazione non valida"]);

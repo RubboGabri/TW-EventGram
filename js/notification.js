@@ -12,16 +12,22 @@ document.addEventListener("DOMContentLoaded", async function() {
 
             const imgLink = document.createElement("a");
             imgLink.href = `user.php?id=${notification.notifier}`;
+            imgLink.className = ''
 
             const img = document.createElement("img");
-            img.src = notification.notifier_pic ? `data:image/jpeg;base64,${notification.notifier_pic}` : "img/profile.png";
+            if(notification.notifier_pic) {
+                img.src = `data:image/jpeg;base64,${notification.notifier_pic}`;
+            } else {
+                img.src = "img/profile.png";
+            }
             img.alt = "Profile Image";
-            img.className = "img-fluid me-3";
+            img.className = "img-fluid rounded-circle";
             img.style.maxHeight = "40px";
 
             imgLink.appendChild(img);
 
             const notificationText = document.createElement("span");
+            notificationText.className = "w-75 text-start ps-3";
             const usernameLink = document.createElement("a");
             usernameLink.href = `user.php?id=${notification.notifier}`;
             usernameLink.textContent = notification.notifier_username;
@@ -53,6 +59,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         function addGroupedNotifications(groupTitle, notifications) {
             if (notifications.length > 0) {
                 const groupTitleElement = document.createElement("h4");
+                groupTitleElement.className = "text-center py-2";
                 groupTitleElement.textContent = groupTitle;
                 notificationsList.appendChild(groupTitleElement);
 
