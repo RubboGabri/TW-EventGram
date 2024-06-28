@@ -3,6 +3,8 @@ require_once("bootstrap.php");
 $templateParams["navbar"] = "template/navbar.php";
 $templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js", "js/logout.js", "js/user.js", "js/post.js");
 
+$templateParams["post_details"] = "template/post_details.php";
+
 $templateParams["postList"] = "template/post.php";
 
 $templateParams["main"] = "user_profile.php";

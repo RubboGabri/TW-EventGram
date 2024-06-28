@@ -245,6 +245,59 @@ switch ($_REQUEST['op']) {
             echo json_encode($result);
         }
         break;
+    case 'subscribeToPost':
+        if (isset($_POST['idPost']) && isUserLoggedIn()) {
+            $result = $dbh->insertSubscription($_SESSION["idUser"], $_POST['idPost']);
+            echo json_encode(["esito" => $result]);
+        }
+        break;
+        
+    case 'unsubscribeToPost':
+        if (isset($_POST['idPost']) && isUserLoggedIn()) {
+            $result = $dbh->removeSubscription($_SESSION["idUser"], $_POST['idPost']);
+            echo json_encode(["esito" => $result]);
+        }
+        break;
+
+        case 'getComments':
+            if (isset($_GET['idPost'])) {
+        
+                $comments = $dbh->getComments($_GET['idPost']);
+        
+                header('Content-Type: application/json');
+                echo json_encode(["comments" => $comments]);
+                exit;
+            }
+            break;
+        
+        
+        case 'addComment':
+            if (isset($_POST["idPost"]) && isset($_POST["comment"])) {
+                $comment = $_POST["comment"];
+                $idPost = $_POST["idPost"];
+                $result = ["esito" => false];
+
+                if (isset($_POST["idParent"])) {
+                    $idParent = $_POST["idParent"];
+                    $commentAdded = $dbh->insertComment($comment, $idPost, $loggedUser, $idParent);
+                } else {
+                    $commentAdded = $dbh->insertComment($comment, $idPost, $loggedUser);
+                }
+        
+                if ($commentAdded) {
+                    $postOwner = $dbh->getUserByPost($idPost);
+                    $ownerId = $postOwner[0]['IDuser'];
+                    $dbh->insertNotification('Comment', $ownerId, $loggedUser, $idPost);
+                    $result["esito"] = true;
+                } else {
+                    $result["errore"] = "Errore nell'aggiunta del commento.";
+                }
+        
+                header('Content-Type: application/json');
+                echo json_encode($result);
+                exit;
+            }
+            break;
 
     default:
         echo json_encode(["errore" => "Operazione non valida"]);
