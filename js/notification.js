@@ -46,6 +46,14 @@ document.addEventListener("DOMContentLoaded", async function() {
                 case 'Post':
                     notificationText.append(usernameLink, ` ha pubblicato un nuovo post "${notification.post_title || ''}"`);
                     break;
+                case 'Subscribe':
+                    /*ownerLink.href = `user.php?id=${notification.post_owner_id}`;
+                    ownerLink.textContent = notification.post_owner_username;
+                    ownerLink.className = "fw-bold text-decoration-none text-dark";
+
+                    notificationText.append(usernameLink, ` si è iscritto al questo post "${notification.post_title || ''}" di `, ownerLink);*/
+                    notificationText.append(usernameLink, ` si è iscritto a questo post "${notification.post_title || ''}"`);
+                    break;
                 default:
                     notificationText.append(" tipo di notifica sconosciuto");
             }

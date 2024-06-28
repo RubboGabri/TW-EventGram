@@ -1,4 +1,75 @@
-/* custom.css */
+
+
+/* Mobile navigation bar */
+.navbar-nav .position-relative a .badge {
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0; /* Adjust this position as needed */
+}
+
+/* Specific styles for the mobile header notification icon */
+header .badge {
+    top: 0;
+    right: 0;
+    font-size: 0.8rem;
+    padding: 3px 6px;
+}
+
+/* Navbar and header styles to ensure the badge is correctly positioned */
+nav.d-none.d-md-block {
+    z-index: 1000; /* Ensure the sidebar is on a lower layer */
+}
+
+.navbar-item a {
+    position: relative;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar-item a .mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: hsla(0, 0%, 98%, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.navbar-item a:hover .mask {
+    opacity: 1;
+}
+
+#notifications .list-group-item {
+    border-radius: 25px;
+    background-color: rgba(184, 184, 184, 0.4); /* Light grey with low opacity */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow */
+    margin-bottom: 10px; /* Space between rows */
+    border: none; /* Remove default border */
+    display: flex;
+    align-items: flex-start;
+}
+
+#notifications .list-group-item img {
+    width: 40px;
+    height: 40px;
+}
+
+.card {
+    border-radius: 25px;
+    background-color: rgba(184, 184, 184, 0.4); /* Light grey with low opacity */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow */
+}
+
+.card-title, .card-subtitle, .card-text, .card-footer {
+    font-size: 1.25rem;
+}
+
+.small-text {
+    font-size: 0.75rem; /* Smaller font size */
+    display: block;
+    margin-top: 5px;
+}
 
 .gradient-background {
     background: linear-gradient(to top right, #4fc3f7 0%, #28a745 100%);
