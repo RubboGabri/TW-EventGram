@@ -37,9 +37,10 @@
             </a>                
         </li>
         <li class="navbar-item">
-            <a href="notification.php" class="d-flex align-items-center my-4 p-1 text-decoration-none text-dark">
+            <a href="notification.php" class="d-flex align-items-center my-4 p-1 text-decoration-none text-dark position-relative">
                 <img src="../img/notification.png" alt="Notifiche" class="img-fluid" style="max-height: 40px">
                 <span class="d-none d-lg-block ms-5 me-5 fs-5 fw-semibold">Notifiche</span>
+                <span id="unread-notifications" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;"></span>
                 <div class="mask rounded" style="background-color: hsla(0, 3%, 6%, 0.2)"></div>
             </a>                
         </li>

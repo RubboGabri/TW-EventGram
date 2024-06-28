@@ -145,6 +145,20 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function markNotificationsAsRead($userID) {
+        $stmt = $this->prepare("UPDATE Notifiche SET is_read = 1 WHERE IDuser = ? AND is_read = 0");
+        $stmt->bind_param('i', $userID);
+        return $stmt->execute();
+    }
+
+    public function getUnreadNotificationCount($IDuser) {
+        $stmt = $this->prepare("SELECT COUNT(*) AS unread_count FROM Notifiche WHERE IDuser = ? AND is_read = 0");
+        $stmt->bind_param('i', $IDuser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
     public function isFollowing($IDfollower, $IDfollowed){
         $stmt = $this->prepare("SELECT * FROM Follower WHERE IDfollower=? AND IDfollowed=?");
         $stmt->bind_param('ii',$IDfollower,$IDfollowed);
