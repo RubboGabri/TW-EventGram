@@ -21,13 +21,13 @@ document.addEventListener("DOMContentLoaded", async function() {
                 img.src = "img/profile.png";
             }
             img.alt = "Profile Image";
-            img.className = "img-fluid rounded-circle";
+            img.className = "img-fluid border border-dark rounded-circle";
             img.style.maxHeight = "40px";
 
             imgLink.appendChild(img);
 
             const notificationText = document.createElement("span");
-            notificationText.className = "w-75 text-start ps-3";
+            notificationText.className = "w-100 text-start ps-3";
             const usernameLink = document.createElement("a");
             usernameLink.href = `user.php?id=${notification.notifier}`;
             usernameLink.textContent = notification.notifier_username;

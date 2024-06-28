@@ -358,5 +358,40 @@ class DatabaseHelper {
         $result = $stmt->get_result();
         return $result->num_rows > 0;
     }
+
+    public function insertComment($text, $IDpost, $IDuser, $IDparent=null) {
+        if ($IDparent == null) {
+            $stmt = $this->prepare("INSERT INTO Commenti (text, IDpost, IDuser) VALUES (?, ?, ?)");
+            $stmt->bind_param('sii', $text, $IDpost, $IDuser);
+        } else {
+            $stmt = $this->prepare("INSERT INTO Commenti (text, IDpost, IDuser, IDparent) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param('siii', $text, $IDpost, $IDuser, $IDparent);
+        }
+        return $stmt->execute();
+    }
+    
+    public function getComments($IDpost) {    
+        $stmt = $this->prepare("SELECT C.*, U.username, U.profilePic FROM Commenti C JOIN Utenti U ON C.IDuser = U.IDuser WHERE C.IDpost = ? ORDER BY C.date DESC");  
+        $stmt->bind_param('i', $IDpost);
+
+        if (!$stmt->execute()) {
+            error_log('Execute statement failed: ' . $stmt->error); // Log statement execution error
+            return [];
+        }
+    
+        $result = $stmt->get_result();  
+        $comments = $result->fetch_all(MYSQLI_ASSOC);
+    
+        // Encode profile pictures in base64
+        foreach ($comments as &$comment) {
+            if ($comment['profilePic'] !== null) {
+                $comment['profilePic'] = base64_encode($comment['profilePic']);
+            }
+        }
+    
+        return $comments;
+    }
+    
+    
 }
 ?>

@@ -16,22 +16,19 @@
             <?php if ($post['img']): ?>
                 <img src="data:image/jpeg;base64,<?php echo base64_encode($post['img']); ?>" class="card-img" alt="<?php echo htmlspecialchars($post['title']); ?>">
             <?php endif; ?>
-            <div class="card-body p-3 py-2">
-                <h5 class="card-title mb-2" style="font-size: 30px;"><?php echo htmlspecialchars($post['title']); ?></h5>
-                <button class="btn btn-link p-0" onclick="toggleDetails(this);">Altro</button>
-                <div class="post-details d-none">
-                    <p class="card-text">Descrizione: <?php echo htmlspecialchars($post['description']); ?></p>
-                    <h6 class="card-subtitle mb-1 text-muted">Luogo: <?php echo htmlspecialchars($post['location']); ?></h6>
-                    <p class="card-text"><small class="text-muted">Data Evento: <?php echo date('Y-m-d H:i', strtotime($post['eventDate'])); ?></small></p>
-                    <p>Likes: <?php echo htmlspecialchars($post['numLikes']); ?></p>
-                    <p>Comments: <?php echo htmlspecialchars($post['numComments']); ?></p>
-                    <?php
-                        $isSubscribed = $dbh->isSubscribed($post['IDpost'], $_SESSION["idUser"]);
-                        $buttonText = $isSubscribed ? "Disiscriviti" : "Iscriviti";
-                        $buttonClass = $isSubscribed ? "btn-danger" : "btn-primary";
-                    ?>
-                    <button class="btn <?php echo $buttonClass; ?> subscribe-btn" data-post-id="<?php echo $post['IDpost']; ?>"><?php echo $buttonText; ?></button>
-                </div>
+            <div class="card-body">
+                <h5 class="card-title" style="font-size: 30px;"><?php echo htmlspecialchars($post['title']); ?></h5>
+                <h6 class="card-subtitle mb-1 text-muted">Luogo: <?php echo htmlspecialchars($post['location']); ?></h6>
+                <p class="card-text mb-1"><small class="text-muted">Data Evento: <?php echo date('Y-m-d H:i', strtotime($post['eventDate'])); ?></small></p>
+                <button class="btn btn-link p-0 text-decoration-none" onclick="toggleDetails(this);">Altro</button>
+                <?php
+                    if(isset($templateParams["post_details"])) {
+                        require($templateParams["post_details"]);
+                    }
+                    if(isset($templateParams["comment_page"])) {
+                        require($templateParams["comment_page"]);
+                    }
+                ?>
             </div>
             <div class="d-flex justify-content-between card-footer">
                 <div>
@@ -46,7 +43,7 @@
                     </a>
                 </div>
                 <div>
-                    <a href="#" class="card-link d-flex align-items-center text-decoration-none">
+                    <a href="javascript:void(0)" class="card-link d-flex align-items-center text-decoration-none comment-btn" id="<?php echo $post['IDpost']; ?>" onclick="toggleComments(this);">
                         <img src="img/comment.png" alt="Comment" class="img-fluid" style="max-height: 22px;"/>
                         <span style="color: #000000; margin-left: 5px;"><?php echo htmlspecialchars($post['numComments']); ?></span>
                     </a>
