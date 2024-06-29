@@ -20,6 +20,9 @@
     background-color: #b57ec9; /* Lighter purple for hover and focus */
 }
 
+nav.d-none.d-md-block {
+    z-index: 1000; /* Ensure the sidebar is on a lower layer */
+}
 
 .navbar-item a {
     position: relative;
@@ -54,10 +57,6 @@
     height: 40px;
 }
 
-#notifications .list-group-item span {
-    word-wrap: break-word; /* Forza il testo ad andare a capo se troppo lungo */
-}
-
 .card {
     border-radius: 25px;
     background-color: rgba(184, 184, 184, 0.4); /* Colore grigio con bassa opacità */
@@ -80,3 +79,8 @@
     font-size: 1.25rem;
 }
 
+.small-text {
+    font-size: 0.75rem; /* Imposta la dimensione del font più piccola */
+    display: block;
+    margin-top: 5px;
+}

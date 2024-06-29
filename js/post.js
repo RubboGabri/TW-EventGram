@@ -27,18 +27,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    document.querySelectorAll('.comment-btn').forEach(function(commentButton) {
-        commentButton.addEventListener('click', function() {
-            const inputGroup = this.nextElementSibling;
-            inputGroup.classList.toggle('d-none');
-        });
-    });
-
-    document.querySelectorAll('.add-comment-btn').forEach(function(button) {
-        button.addEventListener('click', function() {
-            const postId = this.getAttribute('data-post-id');
-            const commentInput = this.previousElementSibling;
-            addComment(postId, commentInput);
+    document.querySelectorAll('.details-btn').forEach(function(detailsButton) {
+        detailsButton.addEventListener('click', function() {
+            toggleDetails(this);
         });
     });
 });
@@ -117,51 +108,114 @@ async function unsubscribeToPost(postId, subscribeButton) {
     }
 }
 
-async function addComment(postId, commentInput) {
-    const comment = commentInput.value;
-    if (comment === '') {
-        return;
+function toggleDetails(button) {
+    const cardBody = button.closest('.card-body');
+    const details = cardBody.querySelector('.post-details');
+    const isDetailsVisible = !details.classList.contains('d-none');
+
+    if (isDetailsVisible) {
+        details.classList.add('d-none');
+        button.innerText = 'Altro';
+    } else {
+        details.classList.remove('d-none');
+        button.innerText = 'Meno';
     }
+}
+
+function toggleComments(element) {
+    const postId = element.getAttribute('id');
+    console.log('Toggling comments for post:', postId);
+    const commentsSection = document.getElementById(`commentsSection_${postId}`);
+    if (commentsSection.style.display === 'none') {
+        commentsSection.style.display = 'block';
+        loadComments(postId);
+        //no scroll
+        //commentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        commentsSection.style.display = 'none';
+    }
+}
+
+function loadComments(postId) {
+    const commentsContainer = document.getElementById(`comments_${postId}`);
+    commentsContainer.innerHTML = ''; // Clear current comments
+    fetch(`utils/api.php?op=getComments&idPost=${postId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Comments loaded:', data);
+            if (data.comments.length > 0) {
+                data.comments.forEach(comment => {
+                    const commentElement = document.createElement('div');
+                    // Use a ternary operator to check if profilePic exists, if not use the default image
+                    const profilePicSrc = comment.profilePic ? `data:image/jpeg;base64,${comment.profilePic}` : '../img/profile.png';
+                    commentElement.innerHTML = `
+                        <div class="d-flex align-items-start mb-2">
+                            <a href="user.php?id=${comment.IDuser}">
+                                <img src="${profilePicSrc}" alt="Profile picture" class="img-fluid border border-dark rounded-circle" style="width: 20px; height: 20px"/>
+                            </a>
+                            <span class="w-100 text-start ps-2" style="word-break: break-word; white-space: normal;">
+                                <div>
+                                    <a href="user.php?id=${comment.IDuser}" class="fw-bold text-decoration-none text-dark"> 
+                                    ${comment.username}
+                                    </a>
+                                    ${comment.text}
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <small class="text-muted small-text m-0">${new Date(comment.date).toLocaleString('it-IT', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</small>
+                                    <button class="btn btn-link text-decoration-none small-text m-0" onclick="replyToComment('${comment.username}', ${postId}, ${comment.IDcomment})">Rispondi</button>
+                                </div>
+                            </span>
+                        </div>
+                    `;                
+                    commentsContainer.appendChild(commentElement);
+                });
+            } else {
+                commentsContainer.innerHTML = '<p>Ancora nessun commento.</p>';
+            }
+        })
+        .catch(error => {
+            commentsContainer.innerHTML = `<p>Errore di caricamento dei commenti: ${error.message}</p>`;
+        });
+}
+
+function replyToComment(username, postId, parentId) {
+    const commentInput = document.getElementById(`addComment_${postId}`);
+    commentInput.value = `@${username} `;
+    commentInput.setAttribute('data-parent-id', parentId); // Imposta l'ID del commento genitore
+    commentInput.focus();
+}
+
+async function postComment(postId) {
+    const commentInput = document.getElementById(`addComment_${postId}`);
+    const commentText = commentInput.value;
+    const parentId = commentInput.getAttribute('data-parent-id') || null; // Leggi l'ID del commento genitore
+
+    if (commentText.trim() === '') return;
 
     const formData = new FormData();
     formData.append('op', 'addComment');
+    formData.append('comment', commentText);
     formData.append('idPost', postId);
-    formData.append('comment', comment);
+    formData.append('idParent', parentId); // Invia l'ID del commento genitore
 
     try {
         const response = await axios.post('utils/api.php', formData);
+        console.log('Comment posted:', response.data);
         if (response.data.esito) {
             commentInput.value = '';
-            alert('Commento aggiunto con successo');
+            commentInput.removeAttribute('data-parent-id'); // Resetta l'attributo dopo l'invio del commento
+            loadComments(postId); // Ricarica i commenti dopo la pubblicazione
         } else {
-            console.error('Errore nell\'aggiungere il commento:', response.data.errore);
+            console.error('Error posting comment:', response.data.errore);
         }
     } catch (error) {
-        console.error('Errore nella richiesta addComment:', error);
+        console.error('Error posting comment:', error);
     }
 }
 
-function loadComments(commentsContainer) {
-    const postId = commentsContainer.getAttribute('data-post-id');
 
-    axios.post('utils/api.php', new URLSearchParams({
-        op: 'getComments',
-        idPost: postId
-    })).then(response => {
-        commentsContainer.innerHTML = response.data.html;
-    }).catch(error => {
-        console.error('Errore nel caricamento dei commenti:', error);
-    });
-}
-
-function toggleDetails(button) {
-    var details = button.nextElementSibling;
-    if (details.classList.contains('d-none')) {
-        details.classList.remove('d-none');
-        button.innerText = 'Meno';
-        loadComments(details.querySelector('.comments-container'));
-    } else {
-        details.classList.add('d-none');
-        button.innerText = 'Altro';
-    }
-}

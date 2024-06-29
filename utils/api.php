@@ -258,29 +258,47 @@ switch ($_REQUEST['op']) {
             echo json_encode(["esito" => $result]);
         }
         break;
-    case 'addComment':
-        if (isset($_POST['idPost']) && isset($_POST['comment']) && $loggedUser != -1) {
-            $result = $dbh->addComment($_POST['idPost'], $loggedUser, $_POST['comment']);
-            echo json_encode(["esito" => $result]);
-        } else {
-            echo json_encode(["esito" => false, "errore" => "Dati mancanti o utente non loggato."]);
-        }
-        break;
-    
-    case 'getComments':
-        if (isset($_POST['idPost'])) {
-            $comments = $dbh->getComments($_POST['idPost']);
-            // Genera l'HTML per i commenti
-            ob_start();
-            foreach ($comments as $comment) {
-                echo "<div class='comment'><strong>{$comment['username']}</strong>: {$comment['text']}</div>";
+
+        case 'getComments':
+            if (isset($_GET['idPost'])) {
+        
+                $comments = $dbh->getComments($_GET['idPost']);
+        
+                header('Content-Type: application/json');
+                echo json_encode(["comments" => $comments]);
+                exit;
             }
-            $html = ob_get_clean();
-            echo json_encode(["html" => $html]);
-        } else {
-            echo json_encode(["html" => ""]);
-        }
-        break;
+            break;
+        
+        
+        case 'addComment':
+            if (isset($_POST["idPost"]) && isset($_POST["comment"])) {
+                $comment = $_POST["comment"];
+                $idPost = $_POST["idPost"];
+                $result = ["esito" => false];
+
+                if (isset($_POST["idParent"]) && $_POST["idParent"] !== 'null') {
+                    $idParent = $_POST["idParent"];
+                    $commentAdded = $dbh->insertComment($comment, $idPost, $loggedUser, $idParent);
+                } else {
+                    // Assicurati che $idParent sia null per PHP, non la stringa 'null'
+                    $commentAdded = $dbh->insertComment($comment, $idPost, $loggedUser, null);
+                }
+        
+                if ($commentAdded) {
+                    $postOwner = $dbh->getUserByPost($idPost);
+                    $ownerId = $postOwner[0]['IDuser'];
+                    $dbh->insertNotification('Comment', $ownerId, $loggedUser, $idPost);
+                    $result["esito"] = true;
+                } else {
+                    $result["errore"] = "Errore nell'aggiunta del commento.";
+                }
+        
+                header('Content-Type: application/json');
+                echo json_encode($result);
+                exit;
+            }
+            break;
 
     default:
         echo json_encode(["errore" => "Operazione non valida"]);
