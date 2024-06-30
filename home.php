@@ -8,14 +8,12 @@ if (isset($_SESSION["idUser"])) {
 
 $templateParams["header"] = "template/header_profile.php";
 $templateParams["navbar"] = "template/navbar.php";
-$templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js", "js/check_notification.js", "js/logout.js", "js/post.js");
+$templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js", "js/check_notification.js", "js/logout.js", "js/post.js", "js/search.js");
 $templateParams["title"] = "EventGram";
 $templateParams["user"] = $_SESSION["idUser"];
 
 $templateParams["post_details"] = "template/post_details.php";
-
 $templateParams["comment_page"] = "template/comment_page.php";
-
 $templateParams["postList"] = "template/post.php";
 $templateParams["main"] = "home_feed.php";
 $templateParams["header"] = "template/header.php";

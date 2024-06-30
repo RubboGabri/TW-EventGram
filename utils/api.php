@@ -261,19 +261,19 @@ switch ($_REQUEST['op']) {
         }
         break;
 
-        case 'subscribeToPost':
-            if (isset($_POST['idPost']) && isUserLoggedIn()) {
-                $idPost = $_POST['idPost'];
-                $result = $dbh->insertSubscription($_SESSION["idUser"], $idPost);
+    case 'subscribeToPost':
+        if (isset($_POST['idPost']) && isUserLoggedIn()) {
+            $idPost = $_POST['idPost'];
+            $result = $dbh->insertSubscription($_SESSION["idUser"], $idPost);
 
-                $followers = $dbh->getFollowers($loggedUser);
-                foreach ($followers as $follower) {
-                    $dbh->insertNotification('Subscribe', $follower['IDfollower'], $loggedUser, $idPost);
-                }
-
-                echo json_encode(["esito" => $result]);
+            $followers = $dbh->getFollowers($loggedUser);
+            foreach ($followers as $follower) {
+                $dbh->insertNotification('Subscribe', $follower['IDfollower'], $loggedUser, $idPost);
             }
-            break;
+
+            echo json_encode(["esito" => $result]);
+        }
+        break;
 
     case 'unsubscribeToPost':
         if (isset($_POST['idPost']) && isUserLoggedIn()) {
@@ -282,43 +282,57 @@ switch ($_REQUEST['op']) {
         }
         break;
 
-        case 'getComments':
-            if (isset($_GET['idPost'])) {
-        
-                $comments = $dbh->getComments($_GET['idPost']);
-        
-                header('Content-Type: application/json');
-                echo json_encode(["comments" => $comments]);
-                exit;
-            }
-            break;
-        
-        
-        case 'addComment':
-            if (isset($_POST["idPost"]) && isset($_POST["comment"])) {
-                $comment = $_POST["comment"];
-                $idPost = $_POST["idPost"];
-                $result = ["esito" => false];
+    case 'getComments':
+        if (isset($_GET['idPost'])) {
 
-                if (isset($_POST["idParent"])) {
-                    $idParent = $_POST["idParent"];
-                    $commentAdded = $dbh->insertComment($comment, $idPost, $loggedUser, $idParent);
-                } else {
-                    $commentAdded = $dbh->insertComment($comment, $idPost, $loggedUser);
-                }
-        
-                if ($commentAdded) {
-                    $postOwner = $dbh->getUserByPost($idPost);
-                    $ownerId = $postOwner[0]['IDuser'];
-                    $dbh->insertNotification('Comment', $ownerId, $loggedUser, $idPost);
-                    $result["esito"] = true;
-                } else {
-                    $result["errore"] = "Errore nell'aggiunta del commento.";
-                }
-        
-                header('Content-Type: application/json');
-                echo json_encode($result);
-                exit;
+            $comments = $dbh->getComments($_GET['idPost']);
+
+            header('Content-Type: application/json');
+            echo json_encode(["comments" => $comments]);
+            exit;
+        }
+        break;
+
+
+    case 'addComment':
+        if (isset($_POST["idPost"]) && isset($_POST["comment"])) {
+            $comment = $_POST["comment"];
+            $idPost = $_POST["idPost"];
+            $result = ["esito" => false];
+
+            if (isset($_POST["idParent"])) {
+                $idParent = $_POST["idParent"];
+                $commentAdded = $dbh->insertComment($comment, $idPost, $loggedUser, $idParent);
+            } else {
+                $commentAdded = $dbh->insertComment($comment, $idPost, $loggedUser);
+            }
+
+            if ($commentAdded) {
+                $postOwner = $dbh->getUserByPost($idPost);
+                $ownerId = $postOwner[0]['IDuser'];
+                $dbh->insertNotification('Comment', $ownerId, $loggedUser, $idPost);
+                $result["esito"] = true;
+            } else {
+                $result["errore"] = "Errore nell'aggiunta del commento.";
+            }
+
+            header('Content-Type: application/json');
+            echo json_encode($result);
+            exit;
+        }
+        break;
+
+        case 'searchUsers':
+            if (isset($_GET['query'])) {
+                $username = $_GET['query'];
+                $users = $dbh->getSimilarUserByUsername($username);
+                $user = $users[0];
+                if ($user['profilePic'] != null) {
+                    $user['profile_pic'] = base64_encode($user['profilePic']);
+                }                
+                echo json_encode($users);
+            } else {
+                echo json_encode([]);
             }
             break;
 

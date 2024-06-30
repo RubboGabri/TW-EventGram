@@ -1,9 +1,7 @@
-
-
 /* Mobile navigation bar */
 .navbar-nav .position-relative a .badge {
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-60%);
     right: 0; /* Adjust this position as needed */
 }
 
@@ -159,4 +157,68 @@ nav.d-none.d-md-block {
 .comment-highlight {
     background-color: yellow;
     transition: background-color 0.5s ease;
+}
+
+/* Stile per la barra di ricerca */
+#search-form {
+    max-width: 100%;
+}
+
+/* Stile per i risultati della ricerca */
+#search-results .user-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+#search-results .user-item img {
+    max-height: 50px;
+    margin-right: 15px;
+}
+
+#search-results .user-item span {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Aggiungi margine tra sezione di ricerca e lista dei post */
+@media (min-width: 768px) {
+    .col-md-7 {
+        margin-right: 0.5rem; /* Riduci lo spazio a destra della lista dei post */
+    }
+}
+
+/* Nascondi la sezione di ricerca su schermi grandi */
+@media (min-width: 768px) {
+    .search-container {
+        display: none;
+    }
+}
+
+/* Mostra la sezione di ricerca su schermi piccoli */
+@media (max-width: 767.98px) {
+    .search-container {
+        display: block;
+    }
+    .search-container h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .search-container .row {
+        justify-content: center;
+    }
+    .search-container .col-12 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #search-form {
+        width: 100%;
+        max-width: 500px; /* Limita la larghezza del modulo */
+    }
+    #search-results {
+        width: 100%;
+        max-width: 500px; /* Limita la larghezza dei risultati di ricerca */
+    }
 }
