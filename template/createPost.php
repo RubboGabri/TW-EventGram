@@ -1,4 +1,4 @@
-<div class="container min-vh-100 d-flex flex-column <?php if(isset($header_offset)) echo $header_offset ?>">
+<div class="container min-vh-100 d-flex flex-column <?php if(isset($header_offset)) echo $header_offset ?> mb-5">
     <h1 class="d-none d-md-block text-center pt-4">Crea un nuovo Post</h1>
     <form action="#" method="post" enctype="multipart/form-data" class="w-75 mx-auto mt-3">
         <p class="text-danger"></p>

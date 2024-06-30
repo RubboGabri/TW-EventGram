@@ -6,7 +6,6 @@
 
 .btn-custom {
     background-color: #9b59b6; /* Light purple */
-    border: none;
     color: white;
     border-radius: 25px; /* Rounded corners */
     padding: 10px 20px; /* Button padding */
@@ -83,4 +82,10 @@ nav.d-none.d-md-block {
     font-size: 0.75rem; /* Imposta la dimensione del font più piccola */
     display: block;
     margin-top: 5px;
+}
+
+/* Aggiungi questo stile al tuo file CSS */
+.comment-highlight {
+    background-color: yellow;
+    transition: background-color 0.5s ease;
 }
