@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
             const notificationText = document.createElement("span");
             notificationText.className = "text-start ps-3";
-            notificationText.style.width = "88%";
+            notificationText.style.width = "87%";
             const usernameLink = document.createElement("a");
             usernameLink.href = `user.php?id=${notification.notifier}`;
             usernameLink.textContent = notification.notifier_username;

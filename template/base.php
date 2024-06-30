@@ -10,6 +10,11 @@
     <link href="css/custom_background.css" rel="stylesheet">
 
 </head>
+<?php
+    if(isset($templateParams["header"])){
+        $header_offset = "py-5 py-md-0";
+    }
+?>
 <body class="gradient-background">
     <?php
         if(isset($templateParams["header"])){

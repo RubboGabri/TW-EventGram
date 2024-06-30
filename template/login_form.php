@@ -21,10 +21,14 @@
                 <input type="submit" name="submit" value="Login" class="btn btn-custom">
             </div>
         </form>
-        <section class="mt-5">
+        <section class="mt-4">
             <span>Non hai un account? </span>
             <h2 class="d-none">Login Section</h2>
-            <a href="register.php" class="link-primary">Registrati</a>
-        </section> 
+            <div class="mt-3">
+                <a href="register.php" class="link-primary">
+                    <button class="btn btn-primary" style="border-radius: 25px">Registrati</button>
+                </a>
+            </div>
+        </section>
     </div>
 </div>

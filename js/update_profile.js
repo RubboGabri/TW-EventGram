@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const result = await updateProfile(username, info, picElem);
         if (result === 0) {
-            console.log('Profilo aggiornato con successo');
             location.href = 'user.php'; // Redirect to user profile page
         } else {
             errorMessage.innerText = result.errore;

@@ -21,10 +21,14 @@
                     <input type="submit" name="submit" value="Registrati" class="btn btn-custom w-100">
                 </div>
             </form>
-            <section class="mt-5">
+            <section class="mt-4">
                 <span>Hai già un account? </span>
                 <h2 class="d-none">Registration Section</h2>
-                <a href="index.php" class="link-primary">Accedi</a>
+                <div class="mt-3">
+                    <a href="index.php" class="link-primary">
+                        <button class="btn btn-primary" style="border-radius: 25px">Accedi</button>
+                    </a>
+                </div>
             </section> 
         </div>
     </div>

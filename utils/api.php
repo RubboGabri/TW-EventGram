@@ -23,7 +23,6 @@ switch ($_REQUEST['op']) {
                 }
             }
 
-            error_log(isUserLoggedIn() ? "Utente loggato" : "Utente non loggato");
             if (isUserLoggedIn()) {
                 $result["esito"] = true;
             }
@@ -293,7 +292,6 @@ switch ($_REQUEST['op']) {
         }
         break;
 
-
     case 'addComment':
         if (isset($_POST["idPost"]) && isset($_POST["comment"])) {
             $comment = $_POST["comment"];
@@ -322,19 +320,39 @@ switch ($_REQUEST['op']) {
         }
         break;
 
-        case 'searchUsers':
-            if (isset($_GET['query'])) {
-                $username = $_GET['query'];
-                $users = $dbh->getSimilarUserByUsername($username);
-                $user = $users[0];
-                if ($user['profilePic'] != null) {
-                    $user['profile_pic'] = base64_encode($user['profilePic']);
-                }                
-                echo json_encode($users);
-            } else {
-                echo json_encode([]);
+    case 'searchUsers':
+        if (isset($_GET['query'])) {
+            $username = $_GET['query'];
+            $users = $dbh->getSimilarUserByUsername($username);
+
+            if (count($users) > 0) {
+                foreach ($users as &$user) { // Utilizzare il riferimento (&) per modificare direttamente l'array
+                    if ($user['profilePic'] != null) {
+                        $user['profilePic'] = base64_encode($user['profilePic']);
+                    }
+                }
             }
-            break;
+            echo json_encode($users);
+        } else {
+            echo json_encode([]);
+        }
+        break;
+
+    case 'getSuggestedUsers':
+        if (isset($_SESSION["idUser"])) {
+            $userId = $_SESSION["idUser"];
+            $suggestedUsers = $dbh->getRandomUsersNotFollowed($userId);
+
+            foreach ($suggestedUsers as &$user) {
+                if ($user['profilePic'] != null) {
+                    $user['profilePic'] = base64_encode($user['profilePic']);
+                }
+            }
+            echo json_encode($suggestedUsers);
+        } else {
+            echo json_encode([]);
+        }
+        break;
 
     default:
         echo json_encode(["errore" => "Operazione non valida"]);
