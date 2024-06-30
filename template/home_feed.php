@@ -14,7 +14,7 @@
                     <h5 class="card-title">Cerca utente</h5>
                     <form id="search-form" class="d-flex align-items-center mb-4">
                         <input type="text" id="search" name="search" placeholder="Inserisci username" class="form-control flex-grow-1 me-2">
-                        <button type="button" id="search-button" class="btn btn-primary">Cerca</button>
+                        <button type="button" id="search-button" class="btn btn-primary" style="border-radius: 25px">Cerca</button>
                     </form>
                     <div id="search-results"></div>
                 </div>
