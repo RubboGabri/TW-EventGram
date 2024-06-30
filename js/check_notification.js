@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     unreadNotificationsSpan.textContent = count > 99 ? '99+' : count;
                     unreadNotificationsSpan.classList.remove('d-none');
                 } else {
-                    unreadNotificationsSpan.classList.remove('d-none');
+                    //unreadNotificationsSpan.classList.remove('d-none');
                     unreadNotificationsSpan.classList.add('d-none');
                 }
             })

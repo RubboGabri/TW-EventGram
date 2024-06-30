@@ -30,6 +30,10 @@ $firstWord = strtok($title, ' ');
             echo '<span class="position-absolute top-50 start-50 translate-middle d-flex align-items-center fs-4 fw-bold">Nuovo post</span>';
             break;
 
+        case 'Search':
+            echo '<span class="position-absolute top-50 start-50 translate-middle d-flex align-items-center fs-4 fw-bold">Cerca Utente</span>';
+            break;
+
         default:
             if (isset($user) && $user["IDuser"] != $_SESSION["idUser"]) {
                 echo '<a href="home.php" class="d-flex align-items-center m-2 p-1"> <img src="img/back.png" alt="Back" class="img-fluid" style="max-height: 30px;"/> </a>';

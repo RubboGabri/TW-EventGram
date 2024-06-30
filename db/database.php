@@ -392,6 +392,15 @@ class DatabaseHelper {
         return $comments;
     }
     
+    public function getSimilarUserByUsername($username) {
+        $stmt = $this->db->prepare("SELECT * FROM Utenti WHERE username LIKE ?");
+        $like_username = "%$username%";
+        $stmt->bind_param('s', $like_username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    
     
 }
 ?>

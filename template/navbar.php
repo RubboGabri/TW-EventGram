@@ -1,16 +1,21 @@
 <nav class="d-md-none container">
-    <ul class="border-top border-dark fixed-bottom navbar-nav d-flex flex-row bg-info" style="height: 7vh;">
-        <li class="d-flex justify-content-center align-items-center" style="min-width: 33.33%">
+    <ul class="border-top border-dark fixed-bottom navbar-nav d-flex flex-row bg-info justify-content-around" style="height: 7vh;">
+        <li class="d-flex justify-content-center align-items-center" style="min-width: 25%;">
             <a href="home.php">
                 <img src="../img/home.png" alt="Home" class="img-fluid" style="max-height: 23px">
             </a>
         </li>
-        <li class="d-flex justify-content-center align-items-center" style="min-width: 33.33%">
+        <li class="d-flex justify-content-center align-items-center" style="min-width: 25%;">
             <a href="create.php">
                 <img src="../img/create.png" alt="Crea" class="img-fluid" style="max-height: 27px">
             </a>
         </li>
-        <li class="d-flex justify-content-center align-items-center position-relative" style="min-width: 33.33%">
+        <li class="d-flex justify-content-center align-items-center" style="min-width: 25%;">
+            <a href="search.php">
+                <img src="../img/search.png" alt="Search" class="img-fluid" style="max-height: 27px">
+            </a>
+        </li>
+        <li class="d-flex justify-content-center align-items-center position-relative" style="min-width: 25%;">
             <a href="user.php">
                 <?php
                 $currentUser = $dbh->getUserById($_SESSION["idUser"])[0];
@@ -23,6 +28,7 @@
         </li>
     </ul>
 </nav>
+
 
 <nav class="d-none d-md-block">
     <ul class="fixed-top col-1 col-lg-3 border-dark border-end d-flex flex-column bg-info text-dark p-3 navbar-nav" style="height: 100vh;">
@@ -37,14 +43,13 @@
             </a>
         </li>
         <li class="navbar-item position-relative">
-    <a href="notification.php" class="d-flex align-items-center my-4 p-1 text-decoration-none text-dark position-relative">
-        <img src="../img/notification.png" alt="Notifiche" class="img-fluid" style="max-height: 40px; margin-right: 10px;">
-        <span class="d-none d-lg-block ms-5 fs-5 fw-semibold">Notifiche</span>
-        <span id="unread-notifications" class="d-none badge rounded-pill bg-danger position-absolute"></span>
-        <div class="mask rounded" style="background-color: hsla(0, 3%, 6%, 0.2)"></div>
-    </a>
-</li>
-
+            <a href="notification.php" class="d-flex align-items-center my-4 p-1 text-decoration-none text-dark position-relative">
+                <img src="../img/notification.png" alt="Notifiche" class="img-fluid" style="max-height: 40px; margin-right: 10px;">
+                <span class="d-none d-lg-block ms-5 fs-5 fw-semibold">Notifiche</span>
+                <span id="unread-notifications" class="d-none badge rounded-pill bg-danger position-absolute"></span>
+                <div class="mask rounded" style="background-color: hsla(0, 3%, 6%, 0.2)"></div>
+            </a>
+        </li>
         <li class="navbar-item">
             <a href="create.php" class="d-flex align-items-center my-4 p-1 text-decoration-none text-dark">
                 <img src="../img/create.png" alt="Crea" class="img-fluid" style="max-height: 40px">
