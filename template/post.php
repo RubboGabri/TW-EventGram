@@ -1,15 +1,15 @@
 <?php foreach ($postList as $post): ?>
     <div class="col-12 pb-5">
-        <div class="card">
-            <div class="post-header p-3">
+        <div class="card" data-post-id="<?php echo $post['IDpost']; ?>">
+            <div class="post-header py-2 px-3">
                 <div class="d-flex align-items-center">
                     <a href="user.php?id=<?php echo urlencode($post["IDuser"]); ?>" class="fw-bold text-decoration-none text-dark">
                         <?php if ($post['profilePic'] != NULL): ?>
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($post['profilePic']); ?>" alt="Profile picture" class="img-fluid" style="max-height: 20px; margin-right: 3px;"/>
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($post['profilePic']); ?>" alt="Profile picture" class="img-fluid border border-dark rounded-circle" style="max-height: 40px;"/>
                         <?php else: ?>
-                            <img src="../img/profile.png" alt="Profile picture" class="img-fluid" style="max-height: 20px; margin-right: 3px;"/>
+                            <img src="../img/profile.png" alt="Profile picture" class="img-fluid" style="max-height: 40px;"/>
                         <?php endif; ?>
-                        <span style="font-weight: bold;"><?php echo htmlspecialchars($post['username']); ?></span>
+                        <span class="fw-bold ps-2"><?php echo htmlspecialchars($post['username']); ?></span>
                     </a>
                 </div>
             </div>
@@ -20,7 +20,9 @@
                 <h5 class="card-title" style="font-size: 30px;"><?php echo htmlspecialchars($post['title']); ?></h5>
                 <h6 class="card-subtitle mb-1 text-muted">Luogo: <?php echo htmlspecialchars($post['location']); ?></h6>
                 <p class="card-text mb-1"><small class="text-muted">Data Evento: <?php echo date('Y-m-d H:i', strtotime($post['eventDate'])); ?></small></p>
-                <button class="btn btn-link p-0 text-decoration-none" onclick="toggleDetails(this);">Altro</button>
+                <button class="btn btn-link p-0 text-decoration-none details-btn">
+                    <img src="../img/more.png" alt="Espandi" style="height: 25px;">
+                </button>
                 <?php
                     if(isset($templateParams["post_details"])) {
                         require($templateParams["post_details"]);
@@ -43,9 +45,9 @@
                     </a>
                 </div>
                 <div>
-                    <a href="javascript:void(0)" class="card-link d-flex align-items-center text-decoration-none comment-btn" id="<?php echo $post['IDpost']; ?>" onclick="toggleComments(this);">
+                    <a href="javascript:void(0)" class="card-link d-flex align-items-center text-decoration-none comment-btn" data-post-id="<?php echo $post['IDpost']; ?>">
                         <img src="img/comment.png" alt="Comment" class="img-fluid" style="max-height: 22px;"/>
-                        <span style="color: #000000; margin-left: 5px;"><?php echo htmlspecialchars($post['numComments']); ?></span>
+                        <span class="comment-count" data-post-id="<?php echo $post['IDpost']; ?>" style="color: #000000; margin-left: 5px;"><?php echo htmlspecialchars($post['numComments']); ?></span>
                     </a>
                 </div>
             </div>

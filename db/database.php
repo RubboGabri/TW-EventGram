@@ -369,29 +369,37 @@ class DatabaseHelper {
         }
         return $stmt->execute();
     }
-    
-    public function getComments($IDpost) {    
-        $stmt = $this->prepare("SELECT C.*, U.username, U.profilePic FROM Commenti C JOIN Utenti U ON C.IDuser = U.IDuser WHERE C.IDpost = ? ORDER BY C.date DESC");  
-        $stmt->bind_param('i', $IDpost);
 
+    public function getComments($IDpost) {
+        $stmt = $this->prepare("SELECT C.*, U.username, U.profilePic FROM Commenti C JOIN Utenti U ON C.IDuser = U.IDuser WHERE C.IDpost = ? ORDER BY C.date ASC");  
+        $stmt->bind_param('i', $IDpost);
+    
         if (!$stmt->execute()) {
             error_log('Execute statement failed: ' . $stmt->error); // Log statement execution error
             return [];
         }
     
-        $result = $stmt->get_result();  
+        $result = $stmt->get_result();
         $comments = $result->fetch_all(MYSQLI_ASSOC);
     
-        // Encode profile pictures in base64
-        foreach ($comments as &$comment) {
+        return $this->buildCommentTree($comments);
+    }
+    
+    private function buildCommentTree(array $comments, $parentId = null) {
+        $branch = [];
+        foreach ($comments as $comment) {
             if ($comment['profilePic'] !== null) {
                 $comment['profilePic'] = base64_encode($comment['profilePic']);
             }
+            if ($comment['IDparent'] == $parentId) {
+                $children = $this->buildCommentTree($comments, $comment['IDcomment']);
+                if ($children) {
+                    $comment['children'] = $children;
+                }
+                $branch[] = $comment;
+            }
         }
-    
-        return $comments;
-    }
-    
-    
+        return $branch;
+    }    
 }
 ?>

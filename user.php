@@ -5,6 +5,8 @@ $templateParams["js"] = array("https://unpkg.com/axios/dist/axios.min.js", "js/l
 
 $templateParams["post_details"] = "template/post_details.php";
 
+$templateParams["comment_page"] = "template/comment_page.php";
+
 $templateParams["postList"] = "template/post.php";
 
 $templateParams["main"] = "user_profile.php";

@@ -66,8 +66,8 @@
             </a>
         </li>
         <li class="navbar-item">
-            <a href="index.php" onclick="logout()" class="d-flex align-items-center my-4 p-1 text-decoration-none text-danger">
-                <img src="../img/logout_red.PNG" alt="Esci" class="img-fluid" style="max-height: 40px">
+            <a href="index.php" onclick="logout()" class="d-flex align-items-center my-4 p-1 text-decoration-none text-dark">
+                <img src="../img/logout.PNG" alt="Esci" class="img-fluid" style="max-height: 40px">
                 <span class="d-none d-lg-block ms-5 me-5 fs-5 fw-semibold">Esci</span>
                 <div class="mask rounded" style="background-color: hsla(0, 3%, 6%, 0.2)"></div>
             </a>

@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async function() {
 
             const imgLink = document.createElement("a");
             imgLink.href = `user.php?id=${notification.notifier}`;
-            imgLink.className = ''
 
             const img = document.createElement("img");
             if(notification.notifier_pic) {
@@ -21,13 +20,14 @@ document.addEventListener("DOMContentLoaded", async function() {
                 img.src = "img/profile.png";
             }
             img.alt = "Profile Image";
-            img.className = "img-fluid border border-dark rounded-circle";
+            img.className = "img-fluid border border-dark rounded-circle me-0";
             img.style.maxHeight = "40px";
 
             imgLink.appendChild(img);
 
             const notificationText = document.createElement("span");
-            notificationText.className = "w-100 text-start ps-3";
+            notificationText.className = "text-start ps-3";
+            notificationText.style.width = "88%";
             const usernameLink = document.createElement("a");
             usernameLink.href = `user.php?id=${notification.notifier}`;
             usernameLink.textContent = notification.notifier_username;

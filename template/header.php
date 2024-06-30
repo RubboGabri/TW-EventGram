@@ -37,8 +37,8 @@ $firstWord = strtok($title, ' ');
             if (isset($user)) {
                 echo '<span class="position-absolute top-50 start-50 translate-middle d-flex align-items-center fs-4 fw-bold">' . htmlspecialchars($user["username"]) . '</span>';
             }
-            echo '<a href="index.php" onclick="logout()" class="ms-auto d-flex align-items-center m-2 p-1 text-decoration-none text-danger">';
-            echo '<span class="mx-3 fs-5 fw-semibold">Esci</span>';
+            echo '<a href="index.php" onclick="logout()" class="ms-auto d-flex align-items-center m-2 p-3 text-decoration-none text-dark">';
+            echo '<img src="../img/logout.PNG" alt="Esci" class="img-fluid" style="max-height: 25px">';
             echo '</a>';
             break;
     }
