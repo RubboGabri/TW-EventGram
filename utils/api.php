@@ -23,7 +23,6 @@ switch ($_REQUEST['op']) {
                 }
             }
 
-            error_log(isUserLoggedIn() ? "Utente loggato" : "Utente non loggato");
             if (isUserLoggedIn()) {
                 $result["esito"] = true;
             }
@@ -55,7 +54,6 @@ switch ($_REQUEST['op']) {
         logout();
         break;
 
-    // api.php
     case 'getNotifications':
         $notifications = $dbh->getNotifications($loggedUser);
 
@@ -79,6 +77,13 @@ switch ($_REQUEST['op']) {
                 $notification['notifier_pic'] = base64_encode($user['profilePic']);
             }
 
+            if ($notification['type'] == 'Subcribe') {
+                $ownerInfo = $dbh->getUserByPost($notification['IDpost']);
+                $owner = $ownerInfo[0];
+                $notification['post_owner_id'] = $owner['IDuser'];
+                $notification['post_owner_username'] = $owner['username'];
+            }
+
             if ($interval->days == 0) {
                 $groupedNotifications["today"][] = $notification;
             } elseif ($interval->days <= 7) {
@@ -90,9 +95,16 @@ switch ($_REQUEST['op']) {
             }
         }
 
+        // Mark notifications as read
+        $dbh->markNotificationsAsRead($loggedUser);
+
         echo json_encode($groupedNotifications);
         break;
 
+    case 'getUnreadNotificationCount':
+        $count = $dbh->getUnreadNotificationCount($loggedUser);
+        echo json_encode($count);
+        break;
 
     case 'createPost':
         if (
@@ -226,7 +238,9 @@ switch ($_REQUEST['op']) {
             $postOwner = $dbh->getUserByPost($idPost);
             $ownerId = $postOwner[0]['IDuser'];
             $postTitle = $postOwner[0]['title'];
-            $dbh->insertNotification('Like', $ownerId, $loggedUser, $idPost);
+            if ($ownerId != $loggedUser) {
+                $dbh->insertNotification('Like', $ownerId, $loggedUser, $idPost);
+            }
 
             $result["esito"] = true;
             $result["errore"] = "Nessuno";
@@ -245,13 +259,23 @@ switch ($_REQUEST['op']) {
             echo json_encode($result);
         }
         break;
+
     case 'subscribeToPost':
         if (isset($_POST['idPost']) && isUserLoggedIn()) {
-            $result = $dbh->insertSubscription($_SESSION["idUser"], $_POST['idPost']);
+            $idPost = $_POST['idPost'];
+            $result = $dbh->insertSubscription($_SESSION["idUser"], $idPost);
+            $PostOwner = $dbh->getUserByPost($idPost);
+            $idPostOwner = $PostOwner[0];
+            $dbh->insertNotification('Subscribe', $idPostOwner['IDuser'], $loggedUser, $idPost);
+            $followers = $dbh->getFollowers($loggedUser);
+            foreach ($followers as $follower) {
+                $dbh->insertNotification('Subscribe', $follower['IDfollower'], $loggedUser, $idPost);
+            }
+
             echo json_encode(["esito" => $result]);
         }
         break;
-        
+
     case 'unsubscribeToPost':
         if (isset($_POST['idPost']) && isUserLoggedIn()) {
             $result = $dbh->removeSubscription($_SESSION["idUser"], $_POST['idPost']);
@@ -259,45 +283,78 @@ switch ($_REQUEST['op']) {
         }
         break;
 
-        case 'getComments':
-            if (isset($_GET['idPost'])) {
-        
-                $comments = $dbh->getComments($_GET['idPost']);
-        
-                header('Content-Type: application/json');
-                echo json_encode(["comments" => $comments]);
-                exit;
-            }
-            break;
-        
-        
-        case 'addComment':
-            if (isset($_POST["idPost"]) && isset($_POST["comment"])) {
-                $comment = $_POST["comment"];
-                $idPost = $_POST["idPost"];
-                $result = ["esito" => false];
+    case 'getComments':
+        if (isset($_GET['idPost'])) {
 
-                if (isset($_POST["idParent"])) {
-                    $idParent = $_POST["idParent"];
-                    $commentAdded = $dbh->insertComment($comment, $idPost, $loggedUser, $idParent);
-                } else {
-                    $commentAdded = $dbh->insertComment($comment, $idPost, $loggedUser);
-                }
-        
-                if ($commentAdded) {
-                    $postOwner = $dbh->getUserByPost($idPost);
-                    $ownerId = $postOwner[0]['IDuser'];
-                    $dbh->insertNotification('Comment', $ownerId, $loggedUser, $idPost);
-                    $result["esito"] = true;
-                } else {
-                    $result["errore"] = "Errore nell'aggiunta del commento.";
-                }
-        
-                header('Content-Type: application/json');
-                echo json_encode($result);
-                exit;
+            $comments = $dbh->getComments($_GET['idPost']);
+
+            header('Content-Type: application/json');
+            echo json_encode(["comments" => $comments]);
+            exit;
+        }
+        break;
+
+    case 'addComment':
+        if (isset($_POST["idPost"]) && isset($_POST["comment"])) {
+            $comment = $_POST["comment"];
+            $idPost = $_POST["idPost"];
+            $result = ["esito" => false];
+
+            if (isset($_POST["idParent"])) {
+                $idParent = $_POST["idParent"];
+                $commentAdded = $dbh->insertComment($comment, $idPost, $loggedUser, $idParent);
+            } else {
+                $commentAdded = $dbh->insertComment($comment, $idPost, $loggedUser);
             }
-            break;
+
+            if ($commentAdded) {
+                $postOwner = $dbh->getUserByPost($idPost);
+                $ownerId = $postOwner[0]['IDuser'];
+                $dbh->insertNotification('Comment', $ownerId, $loggedUser, $idPost);
+                $result["esito"] = true;
+            } else {
+                $result["errore"] = "Errore nell'aggiunta del commento.";
+            }
+
+            header('Content-Type: application/json');
+            echo json_encode($result);
+            exit;
+        }
+        break;
+
+    case 'searchUsers':
+        if (isset($_GET['query'])) {
+            $username = $_GET['query'];
+            $users = $dbh->getSimilarUserByUsername($username);
+
+            if (count($users) > 0) {
+                foreach ($users as &$user) { // Utilizzare il riferimento (&) per modificare direttamente l'array
+                    if ($user['profilePic'] != null) {
+                        $user['profilePic'] = base64_encode($user['profilePic']);
+                    }
+                }
+            }
+            echo json_encode($users);
+        } else {
+            echo json_encode([]);
+        }
+        break;
+
+    case 'getSuggestedUsers':
+        if (isset($_SESSION["idUser"])) {
+            $userId = $_SESSION["idUser"];
+            $suggestedUsers = $dbh->getRandomUsersNotFollowed($userId);
+
+            foreach ($suggestedUsers as &$user) {
+                if ($user['profilePic'] != null) {
+                    $user['profilePic'] = base64_encode($user['profilePic']);
+                }
+            }
+            echo json_encode($suggestedUsers);
+        } else {
+            echo json_encode([]);
+        }
+        break;
 
     default:
         echo json_encode(["errore" => "Operazione non valida"]);

@@ -87,11 +87,12 @@ CREATE TABLE Follower (
 
 CREATE TABLE Notifiche (
      IDnotification int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-     type enum ('Follow','Comment','Post', 'Like') NOT NULL,
+     type enum ('Follow','Comment','Post', 'Like', 'Subscribe') NOT NULL,
      IDuser int NOT NULL,  
      notifier int NOT NULL,  
      IDpost int,  
      date datetime DEFAULT CURRENT_TIMESTAMP,
+     is_read boolean NOT NULL DEFAULT FALSE,
      FOREIGN KEY (IDuser) REFERENCES Utenti(IDuser) ON DELETE CASCADE,
      FOREIGN KEY (notifier) REFERENCES Utenti(IDuser) ON DELETE CASCADE,
      FOREIGN KEY (IDpost) REFERENCES Post(IDpost) ON DELETE CASCADE

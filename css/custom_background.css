@@ -1,5 +1,3 @@
-/* custom.css */
-
 .gradient-background {
     background: linear-gradient(to top right, #4fc3f7 0%, #28a745 100%);
 }
@@ -19,14 +17,23 @@
     background-color: #b57ec9; /* Lighter purple for hover and focus */
 }
 
-nav.d-none.d-md-block {
-    z-index: 1000; /* Ensure the sidebar is on a lower layer */
+/* Mobile navigation bar */
+.navbar-nav .position-relative a .badge {
+    top: 50%;
+    right: 5%;
+    transform: translate(50%, -50%);
+}
+
+/* Specific styles for the mobile header notification icon */
+header .badge {
+    transform: translateY(+70%);
 }
 
 .navbar-item a {
     position: relative;
     transition: background-color 0.3s, color 0.3s;
 }
+
 .navbar-item a .mask {
     position: absolute;
     top: 0;
@@ -37,55 +44,27 @@ nav.d-none.d-md-block {
     opacity: 0;
     transition: opacity 0.3s;
 }
+
 .navbar-item a:hover .mask {
     opacity: 1;
 }
 
 #notifications .list-group-item {
-    border-radius: 25px; /* Angoli arrotondati */
-    background-color: rgba(184, 184, 184, 0.4); /* Colore grigio con bassa opacità */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombra sotto ogni riga */
-    margin-bottom: 10px; /* Spazio tra le righe */
-    border: none; /* Rimuovere il bordo predefinito */
-    display: flex;
-    align-items: flex-start;
-}
-
-#notifications .list-group-item img {
-    width: 40px;
-    height: 40px;
+    border-radius: 25px;
+    background-color: rgba(184, 184, 184, 0.4); /* Light grey with low opacity */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow */
+    margin-bottom: 10px; /* Space between rows */
+    border: none; /* Remove default border */
 }
 
 .card {
     border-radius: 25px;
-    background-color: rgba(184, 184, 184, 0.4); /* Colore grigio con bassa opacità */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombra sotto ogni riga */
-}
-
-.card-title {
-    font-size: 1.5rem;
-}
-
-.card-subtitle {
-    font-size: 1.25rem;
-}
-
-.card-text {
-    font-size: 1.25rem;
-}
-
-.card-footer {
-    font-size: 1.25rem;
+    background-color: rgba(184, 184, 184, 0.4); /* Light grey with low opacity */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow */
 }
 
 .small-text {
-    font-size: 0.75rem; /* Imposta la dimensione del font più piccola */
+    font-size: 0.75rem; /* Smaller font size */
     display: block;
     margin-top: 5px;
-}
-
-/* Aggiungi questo stile al tuo file CSS */
-.comment-highlight {
-    background-color: yellow;
-    transition: background-color 0.5s ease;
 }

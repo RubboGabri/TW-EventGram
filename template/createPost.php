@@ -33,11 +33,11 @@
             </select>
         </div>
         <div class="form-group mt-3">
-            <label for="price">Prezzo:</label>
+            <label for="price">Prezzo(€):</label>
             <input type="number" class="form-control" id="price" name="price" required>
         </div>
         <div class="form-group mt-3">
-            <label for="minAge">Età minima:</label>
+            <label for="minAge">Età minima(Anni):</label>
             <input type="number" class="form-control" id="minAge" name="minAge">
         </div>
         <div class="form-group mt-3">

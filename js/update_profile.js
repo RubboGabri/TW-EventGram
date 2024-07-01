@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const file = imgInput.files[0];
         if (file) {
             removeImageFlag.value = '0'; // Reset the flag if a new image is selected
-            resizeImage(file, 1000, 1000, function(resizedDataUrl) {
+            resizeImage(file, 350, 350, function(resizedDataUrl) {
                 profilePicture.src = resizedDataUrl;
                 resizedImageInput.value = resizedDataUrl; // Store the resized image data URL in hidden input
             });
@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const result = await updateProfile(username, info, picElem);
         if (result === 0) {
-            console.log('Profilo aggiornato con successo');
             location.href = 'user.php'; // Redirect to user profile page
         } else {
             errorMessage.innerText = result.errore;

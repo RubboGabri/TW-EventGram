@@ -11,6 +11,7 @@
                     alt="Profile Picture" class="img-fluid" style="max-height: 150px">
     </picture>
     <div class="text-center mb-3">
+        <label for="img" hidden>Caricamento immagine</label>
         <input type="file" accept=".jpg,.jpeg,.png" class="d-none" id="img" name="img">
         <input type="hidden" id="remove-image-flag" name="removeImage" value="0">
         <input type="hidden" id="resizedImage" name="resizedImage">
@@ -24,7 +25,7 @@
             <input type="text" class="form-control" id="username" name="username" value="<?= $user['username'] ?>" required>
         </div>
         <div class="form-group mt-3">
-            <label for="description">Informazioni:</label>
+            <label for="info">Informazioni:</label>
             <textarea class="form-control" id="info" name="info" rows="5" ><?= $user["info"] !== NULL ? $user['info'] : '' ?></textarea>
         </div>
         <div class="row col-12 text-center py-5 mx-auto">

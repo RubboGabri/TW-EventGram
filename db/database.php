@@ -98,7 +98,7 @@ class DatabaseHelper {
     }
 
     public function getUserByPost($idPost) {
-        $stmt = $this->prepare("SELECT U.IDuser, P.title FROM Post P JOIN Utenti U ON P.IDuser = U.IDuser WHERE P.IDpost = ?");
+        $stmt = $this->prepare("SELECT U.IDuser FROM Post P JOIN Utenti U ON P.IDuser = U.IDuser WHERE P.IDpost = ?");
         $stmt->bind_param('i', $idPost);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -143,6 +143,20 @@ class DatabaseHelper {
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function markNotificationsAsRead($userID) {
+        $stmt = $this->prepare("UPDATE Notifiche SET is_read = 1 WHERE IDuser = ? AND is_read = 0");
+        $stmt->bind_param('i', $userID);
+        return $stmt->execute();
+    }
+
+    public function getUnreadNotificationCount($IDuser) {
+        $stmt = $this->prepare("SELECT COUNT(*) AS unread_count FROM Notifiche WHERE IDuser = ? AND is_read = 0");
+        $stmt->bind_param('i', $IDuser);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
     }
 
     public function isFollowing($IDfollower, $IDfollowed){
@@ -386,6 +400,27 @@ class DatabaseHelper {
             }
         }
         return $branch;
-    }    
+    }
+
+    public function getSimilarUserByUsername($username) {
+        $stmt = $this->db->prepare("SELECT * FROM Utenti WHERE username LIKE ?");
+        $like_username = "%$username%";
+        $stmt->bind_param('s', $like_username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getRandomUsersNotFollowed($userId, $limit = 3) {
+        $stmt = $this->prepare("SELECT IDuser, username, profilePic FROM Utenti
+                                WHERE IDuser NOT IN (SELECT IDfollowed FROM Follower WHERE IDfollower = ?)
+                                AND IDuser != ?
+                                ORDER BY RAND()
+                                LIMIT ?");
+        $stmt->bind_param('iii', $userId, $userId, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 }
 ?>

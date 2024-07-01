@@ -151,7 +151,6 @@ function toggleDetails(button) {
 function toggleComments(element) {
     const card = element.closest('.card');
     const postId = element.getAttribute('data-post-id');
-    console.log('Toggling comments for post:', postId);
     const commentsSection = card.querySelector(`#commentsSection_${postId}`);
     if (commentsSection.style.display === 'none' || commentsSection.style.display === '') {
         commentsSection.style.display = 'block';
@@ -172,7 +171,6 @@ function loadComments(card, postId) {
             return response.json();
         })
         .then(data => {
-            console.log('Comments loaded:', data);
             if (data.comments.length > 0) {
                 const commentsTree = buildCommentsTree(data.comments);
                 commentsTree.forEach(comment => {
@@ -207,9 +205,14 @@ function appendComment(container, comment, postId, depth = 0) {
     commentElement.innerHTML = `
         <div class="d-flex align-items-start mb-3 ${offset}">
             <a href="user.php?id=${comment.IDuser}">
-                <img src="data:image/jpeg;base64,${comment.profilePic ? comment.profilePic : '../img/profile.png'}" alt="Profile picture" class="img-fluid border border-dark rounded-circle" style="width: 30px; height: 30px"/>
+                <img 
+                    src="${comment.profilePic ? 'data:image/jpeg;base64,' + comment.profilePic : '../img/profile.png'}" 
+                    alt="Profile picture" 
+                    class="img-fluid border border-dark rounded-circle" 
+                    style="width: 30px; height: 30px"
+                />
             </a>
-            <span class="text-start ps-2" style="word-break: break-word; white-space: normal; width: 88%">
+            <span class="text-start ps-2" style="word-break: break-word; white-space: normal; width: 87%">
                 <div>
                     <a href="user.php?id=${comment.IDuser}" class="fw-bold text-decoration-none text-dark"> 
                     ${comment.username}
@@ -273,9 +276,7 @@ async function postComment(postId) {
         return;
     }
 
-    console.log("Selected card for postId", postId, card);
     const commentInput = card.querySelector(`#addComment_${postId}`);
-    console.log("Selected comment input", commentInput);
     const commentText = commentInput.value;
 
     if (commentText.trim() === '') return;
@@ -291,7 +292,6 @@ async function postComment(postId) {
 
     try {
         const response = await axios.post('utils/api.php', formData);
-        console.log('Comment posted:', response.data);
         if (response.data.esito) {
             commentInput.value = '';
             commentInput.removeAttribute('data-parent-id'); // Resetta l'attributo dopo l'invio del commento
@@ -337,4 +337,3 @@ function getVisibleSection() {
     // Se non ci sono sezioni, restituire null
     return null;
 }
-
