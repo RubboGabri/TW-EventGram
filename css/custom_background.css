@@ -1,22 +1,70 @@
-/* custom.css */
-
 .gradient-background {
     background: linear-gradient(to top right, #4fc3f7 0%, #28a745 100%);
 }
 
 .btn-custom {
-    background-color: #9b59b6; /* Viola più chiaro */
-    border: none;
+    background-color: #9b59b6; /* Light purple */
     color: white;
-    border-radius: 25px; /* Bordi rotondi */
-    padding: 10px 20px; /* Padding per il bottone */
+    border-radius: 25px; /* Rounded corners */
+    padding: 10px 20px; /* Button padding */
     width: 100%;
-    margin-top: 20px; /* Aggiungi margine superiore per aumentare lo spazio */
-    transition: background-color 0.3s ease; /* Transizione per l'effetto hover */
+    margin-top: 20px; /* Add top margin for spacing */
+    transition: background-color 0.3s ease; /* Transition for hover effect */
 }
 
-.btn-custom:hover {
-    background-color: #b57ec9; /* Viola più chiaro per l'hover */
+.btn-custom:hover,
+.btn-custom:focus {
+    background-color: #b57ec9; /* Lighter purple for hover and focus */
 }
 
+/* Mobile navigation bar */
+.navbar-nav .position-relative a .badge {
+    top: 50%;
+    right: 5%;
+    transform: translate(50%, -50%);
+}
 
+/* Specific styles for the mobile header notification icon */
+header .badge {
+    transform: translateY(+70%);
+}
+
+.navbar-item a {
+    position: relative;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar-item a .mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: hsla(0, 0%, 98%, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.navbar-item a:hover .mask {
+    opacity: 1;
+}
+
+#notifications .list-group-item {
+    border-radius: 25px;
+    background-color: rgba(184, 184, 184, 0.4); /* Light grey with low opacity */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow */
+    margin-bottom: 10px; /* Space between rows */
+    border: none; /* Remove default border */
+}
+
+.card {
+    border-radius: 25px;
+    background-color: rgba(184, 184, 184, 0.4); /* Light grey with low opacity */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow */
+}
+
+.small-text {
+    font-size: 0.75rem; /* Smaller font size */
+    display: block;
+    margin-top: 5px;
+}

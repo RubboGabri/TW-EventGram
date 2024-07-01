@@ -4,7 +4,7 @@ document.querySelector("main form").addEventListener("submit", async function (e
     const username = document.querySelector("#username").value;
     const password = document.querySelector("#password").value;
     const confirmPassword = document.querySelector("#confirm_password").value;
-    let result = await register(username, password, confirmPassword);
+    const result = await register(username, password, confirmPassword);
     if (result.esito === false) {
         document.querySelector("form > p").innerText = result.errore;
     }
@@ -12,10 +12,10 @@ document.querySelector("main form").addEventListener("submit", async function (e
 
 async function register(username, password, confirmPassword) {
     if (username === '' || password === '') {
-        return { esito: false, errore: "Errore! Devi scegliere un Username e una Password!" };
+        return { esito: false, errore: "Errore! Devi scegliere un'username e una password!" };
     }
     if (password !== confirmPassword) {
-        return { esito: false, errore: "Errore! Le password non corrispondono!" };
+        return { esito: false, errore: "Error! The passwords do not match!" };
     }
     const formData = new FormData();
     formData.append('op', "register");
@@ -31,18 +31,7 @@ async function register(username, password, confirmPassword) {
             return response.data;
         }
     } catch (error) {
-        console.error('Errore durante la richiesta:', error);
-        if (error.response) { 
-            console.log('Response data:', error.response.data);
-            console.log('Response status:', error.response.status);
-            console.log('Response headers:', error.response.headers);
-        } else if (error.request) { 
-            console.log('Request:', error.request);
-        } else { 
-            console.log('Error message:', error.message);
-        }
-        console.log('Error config:', error.config);
-        return { esito: false, errore: "Errore durante la richiesta. Si prega di riprovare." };
+        console.error('Errore di registrazione:', error);
+        return { esito: false, errore: "Errore durante la richiesta. Riprovare." };
     }
 }
-
