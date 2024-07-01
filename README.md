@@ -8,13 +8,13 @@ Social Network user-centered, mobile-first, to share event Post.
 4. Suggested changes.
 
 With EventGram you can create your own profile, create new posts, comment and review other users' posts. Moreover, you will receive notifications that you can see from the suitable page.
-![User page image]()
+![User page image](https://github.com/RubboGabri/TW-EventGram/blob/main/img/screenshot_home.png)
 * **Search**: search of a particular post;
 * **Home**: followed users' posts (if logged in) or casual posts from all the users of the social;
 * **Notifications**: visualization of the notifications page;
 * **Profile**: page for the visualization of your own user profile, that you can modify using the button "Modify";
 * **Create post**: form for the creation of a new post.
-![Create post image]()
+![Create post image](https://github.com/RubboGabri/TW-EventGram/blob/main/img/screenshot_user.png)
 
 ## Who created it:
 - sajmir.buzi@studio.unibo.it
